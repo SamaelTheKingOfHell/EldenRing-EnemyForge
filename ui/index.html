@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhantomForge: Character Preset Enemy & Carried Loot Injector</title>
+  <style>
+    :root {
+      --bg-dark: #08090d;
+      --card-bg: #11131a;
+      --card-border: #232738;
+      --gold-primary: #c5a059;
+      --gold-hover: #ffd475;
+      --crimson-primary: #dc2626;
+      --crimson-glow: rgba(220, 38, 38, 0.4);
+      --text-main: #e2e8f0;
+      --text-dim: #94a3b8;
+      --accent-badge: #1e2233;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: linear-gradient(180deg, #161822 0%, #0d0f17 100%);
+      border-bottom: 1px solid var(--card-border);
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .rune-icon {
+      font-size: 28px;
+      color: var(--crimson-primary);
+      text-shadow: 0 0 12px var(--crimson-glow);
+    }
+    .title-group h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-main);
+    }
+    .title-group p {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    select, button {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    select:focus, button:focus { outline: none; border-color: var(--gold-primary); }
+    button.primary {
+      background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+      border: 1px solid #ef4444;
+      font-weight: 600;
+      box-shadow: 0 0 10px var(--crimson-glow);
+    }
+    button.primary:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+    }
+    button.secondary:hover {
+      border-color: var(--gold-primary);
+      color: var(--gold-hover);
+    }
+    .nav-tabs {
+      background: #0d0e14;
+      border-bottom: 1px solid var(--card-border);
+      padding: 0 32px;
+      display: flex;
+      gap: 24px;
+    }
+    .nav-tab {
+      padding: 14px 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dim);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tab.active {
+      color: var(--gold-hover);
+      border-bottom-color: var(--gold-primary);
+    }
+    main {
+      flex: 1;
+      padding: 28px 32px;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 14px 20px;
+      border-radius: 8px;
+    }
+    .action-group {
+      display: flex;
+      gap: 12px;
+    }
+    .grid-presets {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+    .preset-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .preset-card:hover {
+      border-color: #3e445b;
+      transform: translateY(-2px);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .card-archetype {
+      font-size: 13px;
+      color: var(--gold-primary);
+      margin-top: 2px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--accent-badge);
+      color: var(--text-dim);
+      border: 1px solid var(--card-border);
+    }
+    .badge.red {
+      background: rgba(220, 38, 38, 0.15);
+      color: #f87171;
+      border-color: rgba(220, 38, 38, 0.4);
+    }
+    .badge.gold {
+      background: rgba(197, 160, 89, 0.15);
+      color: var(--gold-hover);
+      border-color: rgba(197, 160, 89, 0.4);
+    }
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--card-border);
+      padding-top: 10px;
+    }
+    .loot-section {
+      background: #090a0f;
+      border: 1px dashed #2d3345;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .loot-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold-hover);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .loot-item {
+      font-size: 12px;
+      color: #cbd5e1;
+      padding: 3px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .loot-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--crimson-primary);
+    }
+    .world-loc {
+      font-size: 12px;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px 18px;
+      font-size: 13px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+    th {
+      background: #151824;
+      color: var(--gold-primary);
+      font-weight: 600;
+    }
+    /* Floating Debug Console */
+    #debug-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #991b1b;
+      border: 2px solid #ef4444;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 14px var(--crimson-glow);
+      z-index: 1000;
+      transition: transform 0.2s;
+    }
+    #debug-trigger:hover { transform: scale(1.1); }
+    #debug-drawer {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 580px;
+      height: 380px;
+      background: #0d0e14;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      z-index: 999;
+    }
+    .drawer-header {
+      padding: 10px 16px;
+      background: #141722;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold-hover);
+    }
+    .drawer-content {
+      flex: 1;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #94a3b8;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .log-line.INFO { color: #38bdf8; }
+    .log-line.DEBUG { color: #94a3b8; }
+    .log-line.WARNING { color: #facc15; }
+    .log-line.ERROR { color: #f87171; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="rune-icon">⚔</div>
+      <div class="title-group">
+        <h1 id="txt-title">PhantomForge</h1>
+        <p id="txt-subtitle">Spawn custom Tarnished presets as hostile world enemies dropping their carried gear</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <select id="lang-select">
+        <option value="en">English (EN)</option>
+        <option value="pt_br">Português (BR)</option>
+      </select>
+      <div class="badge red" id="status-pill">Ready</div>
+    </div>
+  </header>
+
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-tab="tab-presets" id="tab-label-presets">Presets & Archetypes</div>
+    <div class="nav-tab" data-tab="tab-world" id="tab-label-world">World Encounters</div>
+    <div class="nav-tab" data-tab="tab-settings" id="tab-label-settings">Settings & Regulation</div>
+  </div>
+
+  <main>
+    <!-- TAB 1: PRESETS -->
+    <div id="tab-presets" class="tab-content active">
+      <div class="action-bar">
+        <div class="action-group">
+          <button class="primary" id="btn-forge">✦ Forge Phantoms & Inject Loot</button>
+          <button class="secondary" id="btn-scan">Scan Presets</button>
+        </div>
+        <div class="action-group">
+          <button class="secondary" id="btn-restore">Restore Pristine Regulation</button>
+          <button class="secondary" id="btn-uninstall">Clean Uninstall</button>
+        </div>
+      </div>
+      <div class="grid-presets" id="preset-container"></div>
+    </div>
+
+    <!-- TAB 2: WORLD ENCOUNTERS -->
+    <div id="tab-world" class="tab-content">
+      <table id="encounters-table">
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th>Encounter Landmark</th>
+            <th>Danger Tier</th>
+            <th>Coordinates (X, Y, Z)</th>
+            <th>Assigned Phantom</th>
+          </tr>
+        </thead>
+        <tbody id="encounters-body"></tbody>
+      </table>
+    </div>
+
+    <!-- TAB 3: SETTINGS -->
+    <div id="tab-settings" class="tab-content">
+      <div class="preset-card" style="max-width: 700px;">
+        <h2 style="font-size: 16px; color: var(--gold-hover); margin-bottom: 12px;">Generator Settings</h2>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div>
+            <label style="font-size: 13px; color: var(--text-dim); display: block; margin-bottom: 4px;">World Placement Strategy</label>
+            <select id="cfg-mode" style="width: 100%;">
+              <option value="thematic_regional">Thematic Regional (Matched to Level & Gear Tier)</option>
+              <option value="roaming_invasions">Roaming Invasions (Hostile World Invaders)</option>
+              <option value="champion_duels">Champion Duels (Crossroads & Arenas)</option>
+              <option value="chaos_expedition">Chaos Expedition (Randomized World Encounters)</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="checkbox" id="cfg-guaranteed" checked>
+            <label for="cfg-guaranteed" style="font-size: 13px;">100% Guaranteed Carried Loot Drop</label>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="checkbox" id="cfg-aura" checked>
+            <label for="cfg-aura" style="font-size: 13px;">Red Invader Phantom Glow (SpEffect 7000)</label>
+          </div>
+          <button class="primary" id="btn-save-settings" style="align-self: flex-start; margin-top: 10px;">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Developer Console Button and Drawer -->
+  <div id="debug-trigger" title="Developer Console">⚙</div>
+  <div id="debug-drawer">
+    <div class="drawer-header">
+      <span>Developer Console [CS-DEBUG]</span>
+      <span style="cursor: pointer;" id="debug-close">✕</span>
+    </div>
+    <div class="drawer-content" id="debug-logs">Streaming logs...</div>
+  </div>
+
+  <script>
+    let i18n = {};
+    let presetsData = [];
+    let encountersData = [];
+
+    async function loadLocalization(lang) {
+      try {
+        const res = await fetch(`/api/localization/${lang}`);
+        i18n = await res.json();
+        applyLocalization();
+      } catch (e) { console.error("Failed to load localization:", e); }
+    }
+
+    function applyLocalization() {
+      if (i18n.app_title) document.getElementById("txt-title").innerText = "PhantomForge";
+      if (i18n.app_subtitle) document.getElementById("txt-subtitle").innerText = i18n.app_subtitle;
+      if (i18n.btn_forge_phantoms) document.getElementById("btn-forge").innerText = "✦ " + i18n.btn_forge_phantoms;
+      if (i18n.btn_scan_presets) document.getElementById("btn-scan").innerText = i18n.btn_scan_presets;
+      if (i18n.btn_restore_backup) document.getElementById("btn-restore").innerText = i18n.btn_restore_backup;
+      if (i18n.btn_clean_uninstall) document.getElementById("btn-uninstall").innerText = i18n.btn_clean_uninstall;
+      if (i18n.tab_presets) document.getElementById("tab-label-presets").innerText = i18n.tab_presets;
+      if (i18n.tab_world) document.getElementById("tab-label-world").innerText = i18n.tab_world;
+      if (i18n.tab_settings) document.getElementById("tab-label-settings").innerText = i18n.tab_settings;
+    }
+
+    async function refreshPresets() {
+      try {
+        const res = await fetch('/api/presets');
+        const data = await res.json();
+        presetsData = data.presets || [];
+        renderPresets();
+      } catch (e) { console.error(e); }
+    }
+
+    async function refreshEncounters() {
+      try {
+        const res = await fetch('/api/encounters');
+        const data = await res.json();
+        encountersData = data.encounters || [];
+        renderEncounters();
+      } catch (e) { console.error(e); }
+    }
+
+    function renderPresets() {
+      const container = document.getElementById("preset-container");
+      container.innerHTML = "";
+      presetsData.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "preset-card";
+        const dropsHtml = p.carried_items.map(i => `
+          <div class="loot-item">
+            <div class="loot-dot"></div>
+            <span>[${i.slot.toUpperCase()}] ${i.name}</span>
+          </div>
+        `).join("");
+
+        card.innerHTML = `
+          <div class="card-header">
+            <div>
+              <div class="card-title">${p.name}</div>
+              <div class="card-archetype">${p.archetype}</div>
+            </div>
+            <div class="badge gold">Lv. ${p.level}</div>
+          </div>
+          <div class="stats-row">
+            <span>HP: ${p.hp}</span>
+            <span>Runes: ${p.runes}</span>
+            <span>Gender: ${p.gender}</span>
+          </div>
+          <div class="loot-section">
+            <div class="loot-title">
+              <span>Carried Loot Drops (100% on Kill)</span>
+              <span>${p.carried_items.length} items</span>
+            </div>
+            ${dropsHtml}
+          </div>
+          <div class="world-loc">
+            <span>📍 ${p.spawn_region} - ${p.spawn_zone} (Tier ${p.danger_tier})</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderEncounters() {
+      const body = document.getElementById("encounters-body");
+      body.innerHTML = "";
+      encountersData.forEach(e => {
+        const row = document.createElement("tr");
+        const coords = e.coordinates ? `X:${e.coordinates.x}, Y:${e.coordinates.y}, Z:${e.coordinates.z}` : "-";
+        row.innerHTML = `
+          <td><strong>${e.region}</strong></td>
+          <td>${e.name} <br><small style="color:#94a3b8;">${e.landmark}</small></td>
+          <td><span class="badge red">Tier ${e.danger_tier}</span></td>
+          <td><small>${coords}</small></td>
+          <td><span class="badge gold">Assigned</span></td>
+        `;
+        body.appendChild(row);
+      });
+    }
+
+    async function streamLogs() {
+      try {
+        const res = await fetch('/api/logs');
+        const data = await res.json();
+        const logsContainer = document.getElementById("debug-logs");
+        if (data.logs) {
+          logsContainer.innerHTML = data.logs.map(l =>
+            `<div class="log-line ${l.level}">[${l.timestamp}] [${l.level}] [${l.source}] ${l.message}</div>`
+          ).join("");
+          logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+      } catch (e) {}
+    }
+
+    // Tabs navigation
+    document.querySelectorAll(".nav-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.tab).classList.add("active");
+      });
+    });
+
+    // Console trigger
+    document.getElementById("debug-trigger").addEventListener("click", () => {
+      const drawer = document.getElementById("debug-drawer");
+      drawer.style.display = drawer.style.display === "flex" ? "none" : "flex";
+      streamLogs();
+    });
+    document.getElementById("debug-close").addEventListener("click", () => {
+      document.getElementById("debug-drawer").style.display = "none";
+    });
+
+    // Action handlers
+    document.getElementById("btn-forge").addEventListener("click", async () => {
+      document.getElementById("status-pill").innerText = "Forging...";
+      const res = await fetch('/api/forge', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: '{}' });
+      const data = await res.json();
+      if (data.status === "success") {
+        document.getElementById("status-pill").innerText = "Forged (" + data.total_forged + ")";
+        alert("Phantoms successfully forged and injected into regulation.bin!");
+      } else {
+        document.getElementById("status-pill").innerText = "Error";
+        alert("Forge failed: " + data.message);
+      }
+      refreshPresets();
+      streamLogs();
+    });
+
+    document.getElementById("btn-scan").addEventListener("click", () => {
+      refreshPresets();
+      refreshEncounters();
+    });
+
+    document.getElementById("btn-restore").addEventListener("click", async () => {
+      if (!confirm("Restore regulation.bin from pristine backup?")) return;
+      const res = await fetch('/api/restore', { method: 'POST' });
+      const data = await res.json();
+      alert(data.message || "Restored");
+    });
+
+    document.getElementById("btn-uninstall").addEventListener("click", async () => {
+      if (!confirm("Clean uninstall injected phantoms?")) return;
+      const res = await fetch('/api/uninstall', { method: 'POST' });
+      const data = await res.json();
+      alert(data.message || "Uninstalled");
+    });
+
+    document.getElementById("lang-select").addEventListener("change", (e) => {
+      loadLocalization(e.target.value);
+    });
+
+    // Initial load
+    loadLocalization("en");
+    refreshPresets();
+    refreshEncounters();
+    setInterval(streamLogs, 3000);
+  </script>
+</body>
+</html>

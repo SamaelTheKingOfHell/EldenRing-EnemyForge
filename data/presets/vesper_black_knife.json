@@ -1,0 +1,58 @@
+{
+  "preset_id": "vesper_black_knife",
+  "name": "Black Knife Vesper",
+  "title": "Assassin of the Night",
+  "archetype": "Destined Death Assassin",
+  "gender": 1,
+  "level": 120,
+  "scaling": {
+    "hp_max": 2600,
+    "mp_max": 200,
+    "stamina_max": 220,
+    "poise": 38,
+    "runes": 22000
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Hostile Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "Stealth Ambush",
+    "combat_style": "Blade of Death Leap & Rapid Dagger Flurry"
+  },
+  "equipment": {
+    "head_id": 414000,
+    "head_name": "Black Knife Hood",
+    "body_id": 414100,
+    "body_name": "Black Knife Armor",
+    "arms_id": 414200,
+    "arms_name": "Black Knife Gauntlets",
+    "legs_id": 414300,
+    "legs_name": "Black Knife Greaves",
+    "right_weapon_1_id": 2120000,
+    "right_weapon_1_name": "Black Knife",
+    "right_weapon_2_id": 0,
+    "left_weapon_1_id": 2020000,
+    "left_weapon_1_name": "Blade of Calling",
+    "left_weapon_2_id": 0,
+    "arrow_id": 0,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 14,
+    "hair_color": [220, 220, 230],
+    "eye_color": [100, 180, 240],
+    "skin_tone": [230, 230, 240]
+  },
+  "spawn_preference": {
+    "region": "Altus Plateau",
+    "zone": "Sainted Hero's Grave Gateway",
+    "danger_tier": 4
+  }
+}

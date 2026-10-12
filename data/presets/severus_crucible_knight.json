@@ -1,0 +1,59 @@
+{
+  "preset_id": "severus_crucible_knight",
+  "name": "Crucible Severus",
+  "title": "Ancient Crucible Champion",
+  "archetype": "Heavy Faith Paladin",
+  "gender": 0,
+  "level": 125,
+  "scaling": {
+    "hp_max": 3600,
+    "mp_max": 200,
+    "stamina_max": 210,
+    "poise": 82,
+    "runes": 24000
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Hostile Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "Relentless",
+    "combat_style": "Heavy Greatsword & Hornshield Guard Counter"
+  },
+  "equipment": {
+    "head_id": 412000,
+    "head_name": "Crucible Tree Helm",
+    "body_id": 412100,
+    "body_name": "Crucible Tree Armor",
+    "arms_id": 412200,
+    "arms_name": "Crucible Gauntlets",
+    "legs_id": 412300,
+    "legs_name": "Crucible Greaves",
+    "right_weapon_1_id": 2060000,
+    "right_weapon_1_name": "Ordovis's Greatsword",
+    "right_weapon_2_id": 0,
+    "left_weapon_1_id": 31100000,
+    "left_weapon_1_name": "Crucible Hornshield",
+    "left_weapon_2_id": 34000000,
+    "left_weapon_2_name": "Clawmark Seal",
+    "arrow_id": 0,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 4,
+    "hair_color": [90, 70, 50],
+    "eye_color": [180, 140, 60],
+    "skin_tone": [200, 180, 160]
+  },
+  "spawn_preference": {
+    "region": "Altus Plateau",
+    "zone": "Leyndell Outskirts / Hermit Merchant Shack",
+    "danger_tier": 4
+  }
+}

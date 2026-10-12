@@ -1,0 +1,58 @@
+{
+  "preset_id": "eleanor_bloody_finger",
+  "name": "Bloody Finger Eleanor",
+  "title": "Bloody Finger",
+  "archetype": "Arcane Bleed Duelist",
+  "gender": 1,
+  "level": 110,
+  "scaling": {
+    "hp_max": 2850,
+    "mp_max": 220,
+    "stamina_max": 180,
+    "poise": 48,
+    "runes": 18500
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Bloody Finger Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "High",
+    "combat_style": "Dual Katana Aggressive Rush"
+  },
+  "equipment": {
+    "head_id": 501000,
+    "head_name": "White Mask",
+    "body_id": 501100,
+    "body_name": "War Surgeon Gown",
+    "arms_id": 501200,
+    "arms_name": "War Surgeon Gloves",
+    "legs_id": 501300,
+    "legs_name": "War Surgeon Trousers",
+    "right_weapon_1_id": 3220000,
+    "right_weapon_1_name": "Rivers of Blood",
+    "right_weapon_2_id": 0,
+    "left_weapon_1_id": 3130000,
+    "left_weapon_1_name": "Uchigatana (Seppuku)",
+    "left_weapon_2_id": 0,
+    "arrow_id": 0,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 12,
+    "hair_color": [180, 20, 30],
+    "eye_color": [220, 30, 30],
+    "skin_tone": [240, 220, 210]
+  },
+  "spawn_preference": {
+    "region": "Caelid",
+    "zone": "Swamp of Aeonia / Church of the Plague",
+    "danger_tier": 3
+  }
+}

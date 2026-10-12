@@ -1,0 +1,180 @@
+0 ----
+10 Narrator
+20 Doctor
+50 COM
+60 IB-07: SOL 644 / Ayre
+70 IB-C03: HAL 826 / Handler Walter
+110 STEEL HAZE / V.IV Rusty
+120 STEEL HAZE ORTUS / Rusty
+130 NIGHTFALL / Raven
+140 DEADSLED / Coldcall
+150 ASTER CROWN / King
+160 BITTER PROMISE / Nosaac
+170 UMBER OX / Chartreuse
+200 ALLMIND
+210 TRANSCRIBER / Kate Markson
+220 ENTANGLE / Sulla
+230 ALLMIND / Coral Release (Phase 1)
+240 ALLMIND / Coral Release (Phase 2)
+300 RaD
+310 FULL COURSE / "Cinder" Carla
+320 CIRCUS / "Chatty" Stick
+330 MILK TOOTH / "Honest" Brute
+340 MAD STOMP / "Invincible" Rummy
+400 Rubicon Liberation Front
+410 BURN PICKAXE / Index Dunham
+420 YUE YU / Little Ziyi
+430 CANDLE RING / Ring Freddie
+440 TSUBASA / Middle Flatwell
+450 ASTGHIK / Thumb Dolmayan
+460 SHINOBI / Rokumonsen
+500 Balam Industries
+510 LIGER TAIL / G1 Michigan
+520 DEEP DOWN / G2 Nile
+530 HEAD BRINGER / G5 Iguazu
+540 CANNON HEAD / G4 Volta
+550 LI LONG / G3 Wu Huahai
+560 HERMIT / G6 Red
+600 Arquebus Corporation
+610 LOCKSMITH / V.I Freud
+620 OPEN FAITH / V.II Snail
+630 BARREN FLOWER / V.III O'Keeffe
+640 RECONFIG / V.V Hawkins
+650 INFECTION / V.VI Maeterlinck
+660 GUIDANCE / V.VII Swinburne
+670 DUAL NATURE / V.VIII Pater
+710 MIND ALPHA / 51-001 K
+720 INSTITUTE / 51-015 GA
+730 RUBICONIAN / 51-014 BE
+740 CORPORATION / 51-013 BE
+750 NIGHTFALL / 51-016 GA
+760 TRAINER / 51-011 AL
+770 TESTER / 51-012 AL
+780 STEEL HAZE ORTUS / 51-101 R
+790 IB-C03: HAL 826 / 51-201 W
+800 MIND BETA / 51-002 K
+810 ECHO / Ayre (Arena)
+820 MIND GAMMA / 51-003 K
+910 IA-C01: EPHEMERA / Enforcement System
+920 TESTER AC / Dafeng Student Pilot
+930 ECHO / Ayre (Ally)
+1010 RLF Soldier
+1020 RLF Officer
+1030 RLF Helicopter Pilot
+1040 RLF Mining Ship Captain
+1050 RLF Mining Ship Crew
+1060 RLF Prisoner
+1070 RLF Prisoner
+1080 RLF Prisoner
+1090 RLF Ground Troops
+1110 Balam MT Squad Member
+1120 Balam MT Squad Leader
+1130 1130_? ? ? -- 1130_？？？
+1140 1140_? ? ? -- 1140_？？？
+1150 Dafeng MT Squad Member
+1210 Schneider MT Squad Member
+1220 Schneider MT Squad Leader
+1250 V.VIII Pater
+1260 V.VI Pater
+1270 V.V Pater
+1280 Arquebus MT Squad Member
+1290 Arquebus MT Squad Leader
+1310 Arquebus Interceptor Crew
+1320 Arquebus Interceptor Captain
+1330 Arquebus Ground Troops
+1340 Arquebus Main Squad Member
+1350 PCA Subject Guard
+1360 PCA Inspector
+1370 PCA Support Squad Member
+1380 PCA Enforcement Squad Member
+1390 PCA Outer Shell Security
+1410 Unknown Craft
+1510 Junker Coyotes
+1610 "Chatty" Stick
+1710 Xylem Control System
+1780 1780_? ? ? -- 1780_？？？
+1910 Raven's Operator
+2000 2000_? ? ? -- 2000_？？？
+2010 AAP07: BALTEUS
+2020 AAP07A: ARQUEBUS BALTEUS / V.II Snail
+2050 AAP03: ENFORCER / Enforcement System
+2100 AAS02: CATAPHRACT / PCA SP Captain
+2110 AA22: HEAVY CAVALRY / PCA 2nd Lieutenant
+2120 AA18: LIGHT CAVALRY / PCA Chief Sergeant 1st Cls
+2130 AA18: LIGHT CAVALRY / PCA Chief Sergeant 2nd Cls
+2140 AA22: HEAVY CAVALRY / PCA Warrant Officer
+2150 AAS03: EKDROMOI EP / PCA SP 2nd Lieutenant
+2160 AAS03: EKDROMOI PG / PCA SP Chief Sergeant 1st Cls
+2200 AA22: HEAVY CAVALRY / PCA Captain
+2210 AA18A: LIGHT CAVALRY HM / PCA 1st Lieutenant
+2220 AAS02: CATAPHRACT / PCA SP 1st Lieutenant
+2230 AAS03: EKDROMOI PG / PCA SP Warrant Officer
+2240 AAS03: EKDROMOI MG / PCA SP Chief Sergeant 2nd Cls
+2250 AA18A: LIGHT CAVALRY HM / V.III Pater
+2260 AA22: HEAVY CAVALRY / Arquebus Main Squad Member
+2300 AS07: HEAVY WARSHIP
+2350 AH12: HC HELICOPTER / Illegal Entry
+2360 AH12: HC HELICOPTER / Survey the Uninhabited Floating City
+2400 AB08: NEPENTHES
+3050 HA-T-102 JUGGERNAUT
+4050 EC-0804 SMART CLEANER
+4060 EB-0309 STRIDER
+4070 4070_? ? ? -- 4070_？？？
+5050 5050_? ? ? -- 5050_？？？
+5060 5060_? ? ? -- 5060_？？？
+6050 IA-02: ICE WORM
+6060 IA-05: DESERT WEEVIL
+6070 IB-01: CEL 240
+6080 IA-13: SEA SPIDER
+7050 12(34) GHOST
+8050 RLF HELICOPTER
+8100 RaD BREACH PROGRESS
+8200 RaD MAIN MISSILE
+8210 RaD SUB-MISSILE (RIGHT)
+8220 RaD SUB-MISSILE (LEFT)
+8300 XYLEM CONTROL TOWER
+8310 XYLEM SHIELD
+8320 XYLEM LOCKOUT PROGRESS
+30060 main missile -- メインミサイル
+30061 Sub missile_right -- サブミサイル_右
+30062 Sub missile_left -- サブミサイル_左
+91000 Decisive Ace A -- 決戦のエースA
+91010 Decisive Ace B -- 決戦のエースB
+91020 string AC -- 文字列AC
+91030 Yulia -- ユーリヤ
+91040 assassin -- 刺客
+91050 Ash (early model) -- アッシュ（前期機体）
+91060 Ash (late model) -- アッシュ（後期機体）
+91070 number 2 -- ナンバー2
+91080 Number 4 (Reinforced Human Company A) -- ナンバー4（強化人間中隊A）
+91090 Number 7 (Reinforced Human Company B) -- ナンバー7（強化人間中隊B）
+91100 Collapse A layer AC -- 崩落A層AC
+91110 Unmanned AC in the reactor core -- 炉心の無人AC
+91120 Carla -- カーラ
+91130 leicester -- レスター
+91140 Wild Geese A -- ワイルド・ギースA
+91150 Wild Geese B -- ワイルド・ギースB
+91160 Wild Geese C -- ワイルド・ギースC
+91170 People of Ash A -- 灰の民A
+91180 People of Ash B -- 灰の民B
+91190 People of Ash C -- 灰の民C
+91200 number 1 -- ナンバー1
+91210 Kara's subordinate -- カーラの部下
+91220 Nest unmanned AC (shooting) -- ネストの無人AC（射撃）
+91230 Nest Unmanned AC (Melee) -- ネストの無人AC（近接）
+91240 Nest unmanned AC (strong small fry) -- ネストの無人AC（強雑魚）
+92000 Wild Geese D -- ワイルドギースD
+92010 Wild Geese E -- ワイルドギースE
+92020 Wild Geese F -- ワイルドギースF
+92030 Bayram battle data -- ベイラムの戦闘データ
+92040 number 6 -- ナンバー6
+92050 number 5 -- ナンバー5
+92060 number 3 -- ナンバー3
+92070 People of Ash D -- 灰の民D
+92080 People of Ash E (strong JUDO) -- 灰の民E（強JUDO）
+92090 Drunker -- ドランカー
+92100 Drunker battle data -- ドランカーの戦闘データ
+92110 Independent mercenary A -- 独立傭兵A
+92120 Independent mercenary B -- 独立傭兵B
+92130 dead strongman -- 死んだ強者
+92140 simulator unmanned ac -- シミュレーター無人AC

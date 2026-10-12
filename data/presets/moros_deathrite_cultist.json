@@ -1,0 +1,58 @@
+{
+  "preset_id": "moros_deathrite_cultist",
+  "name": "Death Cultist Moros",
+  "title": "Herald of Ghostflame",
+  "archetype": "Frost & Death Sorcerer",
+  "gender": 0,
+  "level": 115,
+  "scaling": {
+    "hp_max": 2900,
+    "mp_max": 310,
+    "stamina_max": 180,
+    "poise": 45,
+    "runes": 21000
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Hostile Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "Medium",
+    "combat_style": "Death's Poker Ghostflame Ignition & Frostbite Pressure"
+  },
+  "equipment": {
+    "head_id": 419000,
+    "head_name": "Royal Remains Helm",
+    "body_id": 419100,
+    "body_name": "Royal Remains Armor",
+    "arms_id": 419200,
+    "arms_name": "Royal Remains Gauntlets",
+    "legs_id": 419300,
+    "legs_name": "Royal Remains Greaves",
+    "right_weapon_1_id": 2190000,
+    "right_weapon_1_name": "Death's Poker",
+    "right_weapon_2_id": 0,
+    "left_weapon_1_id": 2220000,
+    "left_weapon_1_name": "Helphen's Steeple",
+    "left_weapon_2_id": 0,
+    "arrow_id": 0,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 3,
+    "hair_color": [80, 80, 85],
+    "eye_color": [120, 210, 255],
+    "skin_tone": [170, 175, 180]
+  },
+  "spawn_preference": {
+    "region": "Mountaintops of the Giants",
+    "zone": "Freezing Lake / Deathbird Ruins",
+    "danger_tier": 5
+  }
+}

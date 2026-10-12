@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# PhantomForge runtime data
+logs/
+mod/
+phantomforge_manifest.json
+backups/regulation.bin.bak_*
+!backups/regulation.bin.bak_20261002_135333
+!backups/INDEX.md

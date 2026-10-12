@@ -1,0 +1,59 @@
+{
+  "preset_id": "sellen_carian_spellblade",
+  "name": "Carian Spellblade Laura",
+  "title": "Carian Royalty Vanguard",
+  "archetype": "Intelligence Spellblade",
+  "gender": 1,
+  "level": 95,
+  "scaling": {
+    "hp_max": 2400,
+    "mp_max": 380,
+    "stamina_max": 160,
+    "poise": 42,
+    "runes": 16000
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Hostile Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "Tactical",
+    "combat_style": "Transient Moonlight Katana & Glintstone Comet Ranged"
+  },
+  "equipment": {
+    "head_id": 400000,
+    "head_name": "Carian Knight Helm",
+    "body_id": 400100,
+    "body_name": "Carian Knight Armor",
+    "arms_id": 400200,
+    "arms_name": "Carian Knight Gauntlets",
+    "legs_id": 400300,
+    "legs_name": "Carian Knight Greaves",
+    "right_weapon_1_id": 3120000,
+    "right_weapon_1_name": "Moonveil",
+    "right_weapon_2_id": 0,
+    "left_weapon_1_id": 33070000,
+    "left_weapon_1_name": "Carian Regal Scepter",
+    "left_weapon_2_id": 31050000,
+    "left_weapon_2_name": "Carian Knight's Shield",
+    "arrow_id": 0,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 8,
+    "hair_color": [40, 60, 110],
+    "eye_color": [80, 140, 220],
+    "skin_tone": [245, 235, 230]
+  },
+  "spawn_preference": {
+    "region": "Liurnia of the Lakes",
+    "zone": "Academy Gate Town / Bellum Highway",
+    "danger_tier": 2
+  }
+}

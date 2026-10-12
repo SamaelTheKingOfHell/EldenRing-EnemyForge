@@ -1,0 +1,12 @@
+{
+  "game_dir": "",
+  "active_regulation_path": "",
+  "target_mod_dir": "mod",
+  "placement_mode": "thematic_regional",
+  "guaranteed_carried_loot": true,
+  "global_drop_chance_percent": 100.0,
+  "enable_invasion_aura": true,
+  "scale_attributes_by_tier": true,
+  "mystery_mode": false,
+  "ui_language": "en"
+}

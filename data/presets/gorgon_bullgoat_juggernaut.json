@@ -1,0 +1,58 @@
+{
+  "preset_id": "gorgon_bullgoat_juggernaut",
+  "name": "Juggernaut Gorgon",
+  "title": "Unstoppable Poise Champion",
+  "archetype": "Pure Strength Colossal",
+  "gender": 0,
+  "level": 140,
+  "scaling": {
+    "hp_max": 4200,
+    "mp_max": 100,
+    "stamina_max": 240,
+    "poise": 100,
+    "runes": 32000
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Hostile Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "Relentless Poise",
+    "combat_style": "Giant-Crusher Heavy Slam & Lions Claw"
+  },
+  "equipment": {
+    "head_id": 418000,
+    "head_name": "Bull-Goat Helm",
+    "body_id": 418100,
+    "body_name": "Bull-Goat Armor",
+    "arms_id": 418200,
+    "arms_name": "Bull-Goat Gauntlets",
+    "legs_id": 418300,
+    "legs_name": "Bull-Goat Greaves",
+    "right_weapon_1_id": 7040000,
+    "right_weapon_1_name": "Giant-Crusher",
+    "right_weapon_2_id": 0,
+    "left_weapon_1_id": 0,
+    "left_weapon_1_name": "Two-Handing Weapon",
+    "left_weapon_2_id": 0,
+    "arrow_id": 0,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 1,
+    "hair_color": [60, 50, 40],
+    "eye_color": [140, 80, 40],
+    "skin_tone": [180, 160, 150]
+  },
+  "spawn_preference": {
+    "region": "Dragonbarrow",
+    "zone": "Great Jar Colosseum Path",
+    "danger_tier": 5
+  }
+}

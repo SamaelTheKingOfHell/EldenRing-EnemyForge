@@ -1,0 +1,169 @@
+0 0: None -- 0:なし
+1 1: hard stone -- 1:硬石
+2 2: Sharp stone -- 2:鋭石
+3 3: Minagishi -- 3:みなぎ石
+4 4: Nibiishi -- 4:にび石
+5 5: Blade stone -- 5:刃石
+6 6: Spider thread steel wire -- 6:蜘蛛糸鋼線
+7 7: Mercury stone -- 7:水銀石
+8 8: Dragon stone -- 8:竜石
+9 9: Suction stone -- 9:吸いつき石
+10 10: Pierre stone -- 10:髄石
+11 11:Moonlight stone -- 11:月光石
+12 12: Moonstone -- 12:月影石
+13 13: Faint stone -- 13:微光石
+14 14: Magic shield stone -- 14:魔法盾石
+15 15: Ore Spirit DS -- 15:鉱石の精霊DS
+16 16:DS -- 16:ＤＳ
+20 For animation movement amount correction -- アニメ移動量補正用
+50 The lower the equipment weight, the higher the attack power. -- 装備重量が低いほど攻撃力アップ
+51 The heavier the equipment, the higher the attack power. -- 装備重量が重いほど攻撃力アップ
+100 Max HP -- 最大HP
+101 Max MP -- 最大MP
+102 Defense power (soul level) -- 防御力（ソウルレベル）
+110 Poison resistance (soul level) -- 毒耐性（ソウルレベル）
+111 Plague resistance (soul level) -- 疫病耐性（ソウルレベル）
+112 Bleeding resistance (soul level) -- 出血耐性（ソウルレベル）
+113 Curse resistance (soul level) -- 呪い耐性（ソウルレベル）
+114 Cold resistance (soul level) -- 冷気耐性（ソウルレベル）
+120 Poison resistance (stamina) -- 毒耐性（体力）
+121 Plague resistance (stamina) -- 疫病耐性（体力）
+122 Bleeding resistance (endurance) -- 出血耐性（持久力）
+123 Curse resistance (luck) -- 呪い耐性（運）
+124 Cold resistance (vitality) -- 冷気耐性（生命力）
+130 Physical defense power (strength) -- 物理防御力（筋力）
+131 Physical defense power (stamina) -- 物理防御力（体力）
+132 Magic defense (faith) -- 魔法防御力（信仰）
+133 Fire defense (strength) -- 炎防御力（筋力）
+134 Lightning defense (endurance) -- 雷防御力（持久力）
+135 Dark defense power (faith) -- 闇防御力（信仰）
+140 Drop rate (luck) -- ドロップ率（運）
+150 Maximum number of recovery spots to replenish -- 回復スポットの最大補充数
+160 Shield status correction physical cut rate -- 盾ステータス補正 物理カット率
+161 Shield status correction attribute cut rate -- 盾ステータス補正 属性カット率
+162 Shield status correction resistance cut rate -- 盾ステータス補正 耐性カット率
+163 Shield status correction stamina cut rate -- 盾ステータス補正 スタミナカット率
+170 Arts point maximum value (strength) -- アーツポイント最大値（筋力）
+171 Arts point maximum value (skill) -- アーツポイント最大値（技量）
+172 Arts point maximum (magic) -- アーツポイント最大値（魔法）
+173 Arts point maximum (miracle) -- アーツポイント最大値（奇跡）
+200 growth consumption soul -- 成長消費ソウル
+205 OS enhancement level required experience points -- OS強化レベル必要経験値
+210 Fall damage base value -- 落下ダメージ基本値
+211 Fall damage weight percentage correction -- 落下ダメージ重量割合補正
+212 Fall damage vitality correction -- 落下ダメージ生命力補正
+213 Falling damage skill correction -- 落下ダメージ技量補正
+220 WEIGHT - Unknown
+221 WEIGHT - Tank (FORTALEZA): Walk Initial Speed
+222 WEIGHT - Tank (FORTALEZA): Walk Max Speed
+223 WEIGHT - Tank (FORTALEZA): Walk Speed
+224 WEIGHT - Tank (FORTALEZA): Grounded Boost Max Speed
+225 WEIGHT - Tank (FORTALEZA): Inertia Change Ability
+226 WEIGHT - Tank (FORTALEZA): Drift Speed
+227 WEIGHT - Tank (FORTALEZA): Drift Traction
+260 WEIGHT - Grounded Boost Speed
+261 WEIGHT - Aerial Boost Speed
+262 WEIGHT - Upwards Boost Max Speed (Boosting)
+263 WEIGHT - Quick Boost Speed
+264 WEIGHT - Quick Boost Initial Speed
+265 WEIGHT - Upwards Boost Max Speed (Not Boosting)
+266 WEIGHT - Assault Boost Initial Speed
+267 WEIGHT - Assault Boost Max Speed
+268 WEIGHT - Melee Boost Speed (Locked On)
+269 WEIGHT - Melee Boost Speed
+270 WEIGHT - Unknown
+271 WEIGHT - Tank: Walk Initial Speed
+272 WEIGHT - Tank: Walk Max Speed
+273 WEIGHT - Tank: Walk Speed
+274 WEIGHT - Tank: Grounded Boost Max Speed
+275 WEIGHT - Tank: Inertia Change Ability
+276 WEIGHT - Tank: Drift Speed
+277 WEIGHT - Tank: Drift Traction
+278 WEIGHT - Accumulative Attitude Recovery Drain Time
+279 Total weight correction factor: Landing stiffness occurrence speed [km/h] -- 総重量補正係数：着地硬直発生速度[km/h]
+280 WEIGHT - Kick Damage Adjustment
+281 WEIGHT - Unknown Weight Bonus
+282 WEIGHT - Tetrapod: Hover Speed
+283 WEIGHT - Tetrapod: Hover Velocity
+290 BOOSTER - Quick + Boost Performance
+291 BOOSTER - Upwards Performance
+292 BOOSTER - Quickboost Duration
+293 TETRAPOD - Quickboost Performance
+294 Excess weight correction factor: Jump quick boost height reached [m] -- 重量過多補正係数：ジャンプクイックブースト到達高度[m]
+295 TETRAPOD - Hover EN Consumption
+296 TETRAPOD - Hover Speed
+297 TETRAPOD - Hover Change Inertia
+300 Stability performance correction value -- 安定性能補正値
+310 ANGLE OF MOVEMENT INTERTIA VS DIRECTION - Boost Mode Speed
+320 ARM LOAD - Quick Boost Recovery Time
+321 ARM LOAD - Quick Boost EN Cost
+322 ARM LOAD - Quick Boost Duration
+323 OVERWEIGHT LOAD - EN Load
+324 OVERWEIGHT LOAD - EN Recovery Delay
+325 OVERWEIGHT LOAD - EN Depleted Recovery Delay
+330 Residual impact value_Volatilization rate when EN decreases [point/s] -- 残留衝撃値_EN減少時揮発速度[point/s]
+331 Residual impact value_EN maximum volatilization rate [point/s] -- 残留衝撃値_EN最大時揮発速度[point/s]
+332 Residual impact value_Volatilization rate [point/s] -- 残留衝撃値_揮発速度[point/s]
+350 Player EN recovery speed [EN value/sec] -- プレイヤーEN回復速度[EN値/sec]
+400 bullet distance attenuation -- 弾丸距離減衰
+410 ricochet distance -- 跳弾距離
+500 Enemy search level accumulated value -- エネミーの索敵度蓄積値
+510 Enemy search level: Upper limit for each distance -- 索敵度：距離ごとの上限値
+511 Search level: Attenuation value per distance (pt/sec) -- 索敵度：距離ごとの減衰値(pt/sec)
+515 Enemy search level: Basic value when completely discovered -- 索敵度：完全発見時の基礎値
+516 Enemy search level: Attenuation value when completely discovered (pt/sec) -- 索敵度：完全発見時の減衰値(pt/sec)
+520 Enemy search blur: Blur distance for each enemy search level (m) -- 索敵ブレ：索敵度ごとのブレ距離（m）
+530 Enemy engagement level accumulated value (visual) -- エネミーの交戦度蓄積値（視覚）
+535 Enemy engagement level accumulated value (radar) -- エネミーの交戦度蓄積値（レーダー）
+600 GENERATOR - EN Output
+610 GENERATOR - EN Output
+620 GENERATOR - EN Recharge Delay
+621 GENERATOR - EN Post Recovery
+700 FCS - Softlock Strength
+701 WEIGHT - FCS - Armload Target Tracking
+702 FCS - Hardlock Strength
+703 FCS - White Lock Strength (0 is 100%)
+800 lock grace time -- ロック猶予時間
+801 Lock maintenance time through walls -- 壁越しロック維持時間
+850 Recoil - Recoil Parameter Multiplier
+851 Recoil - Reduction Rate per Second
+852 Recoil - Reduction Delay
+853 Maximum prediction rate decrease due to attack recoil blur -- 攻撃反動ブレによる予測率低下最大値
+860 Amount of prediction rate decrease due to attack recoil blur -- 攻撃反動ブレによる予測率低下量
+861 Launch angle random number increase rate due to attack recoil blur -- 攻撃反動ブレによる発射角度乱数増加割合
+862 Launch angle random number initial value correction coefficient by arm recoil control -- 腕部反動制御による発射角度乱数初期値補正 係数
+900 Acquisition degree reduction amount -- 捕捉度 減少量
+901 Proximity appropriate angular velocity correction amount -- 近接適正 角速度補正量
+950 Prediction rate addition amount (horizontal) -- 予測率加算量（水平）
+951 Prediction rate subtraction amount (horizontal) -- 予測率減算量（水平）
+960 Prediction rate addition amount (vertical) -- 予測率加算量（垂直）
+961 Prediction rate subtraction amount (vertical) -- 予測率減算量（垂直）
+970 FIREARM SPECIALIZATION - Target Tracing Multiplier
+971 FIREARM SPECIALIZATION - Unknown Penalty
+980 Reload time correction factor based on fighting aptitude -- 格闘適性によるリロード時間補正係数
+981 Charge time correction factor based on fighting aptitude -- 格闘適性によるチャージ時間補正係数
+982 MELEE SPECIALIZATION - Melee Weapon Damage
+990 Reload time correction factor based on EN weapon aptitude -- EN武器適性によるリロード時間補正係数
+991 ENERGY FIREARM SPECIALIZATION - Weapon Charge Speed
+992 ENERGY FIREARM SPECIALIZATION - Energy Weapon Damage
+1000 Blast distance attenuation (00 for own aircraft) -- 爆風距離減衰（自機用00）
+1001 Blast distance attenuation (01 for own aircraft) -- 爆風距離減衰（自機用01）
+1002 Blast distance attenuation (for own aircraft 02) -- 爆風距離減衰（自機用02）
+1003 DAMAGE TYPE - Plasma Scaling
+1004 Blast distance attenuation (04 for own aircraft) -- 爆風距離減衰（自機用04）
+1005 Blast distance attenuation (05 for own aircraft) -- 爆風距離減衰（自機用05）
+1006 Blast distance attenuation (06 for own aircraft) -- 爆風距離減衰（自機用06）
+1007 Blast distance attenuation (07 for own aircraft) -- 爆風距離減衰（自機用07）
+1008 Blast distance attenuation (08 for own aircraft) -- 爆風距離減衰（自機用08）
+1009 Blast distance attenuation (09 for own aircraft) -- 爆風距離減衰（自機用09）
+1010 Blast distance attenuation (10 for own aircraft) -- 爆風距離減衰（自機用10）
+1100 Blast distance attenuation (00 for enemy) -- 爆風距離減衰（敵用00）
+1101 Blast distance attenuation (01 for enemy) -- 爆風距離減衰（敵用01）
+1102 Blast distance attenuation (for enemy 02) -- 爆風距離減衰（敵用02）
+1103 Blast distance attenuation (for enemy 03) -- 爆風距離減衰（敵用03）
+1104 Blast distance attenuation (04 for enemy) -- 爆風距離減衰（敵用04）
+1105 Blast distance attenuation (05 for enemy) -- 爆風距離減衰（敵用05）
+1106 Blast distance attenuation (06 for enemy) -- 爆風距離減衰（敵用06）
+1107 Blast distance attenuation (07 for enemy) -- 爆風距離減衰（敵用07）
+1108 Blast distance attenuation (08 for enemy) -- 爆風距離減衰（敵用08）
+1109 Blast distance attenuation (09 for enemy) -- 爆風距離減衰（敵用09）

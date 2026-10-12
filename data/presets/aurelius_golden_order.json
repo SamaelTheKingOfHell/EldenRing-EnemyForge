@@ -1,0 +1,59 @@
+{
+  "preset_id": "aurelius_golden_order",
+  "name": "Paladin Aurelius",
+  "title": "Fundamentalist Inquisitor",
+  "archetype": "Holy Faith Inquisitor",
+  "gender": 0,
+  "level": 90,
+  "scaling": {
+    "hp_max": 2500,
+    "mp_max": 250,
+    "stamina_max": 170,
+    "poise": 55,
+    "runes": 15000
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Hostile Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "High",
+    "combat_style": "Golden Order Greatsword Establish Order & Ranged Bow"
+  },
+  "equipment": {
+    "head_id": 408000,
+    "head_name": "Twinned Helm",
+    "body_id": 408100,
+    "body_name": "Twinned Armor",
+    "arms_id": 408200,
+    "arms_name": "Twinned Gauntlets",
+    "legs_id": 408300,
+    "legs_name": "Twinned Greaves",
+    "right_weapon_1_id": 2170000,
+    "right_weapon_1_name": "Golden Order Greatsword",
+    "right_weapon_2_id": 20020000,
+    "right_weapon_2_name": "Erdtree Bow",
+    "left_weapon_1_id": 34050000,
+    "left_weapon_1_name": "Golden Order Seal",
+    "left_weapon_2_id": 0,
+    "arrow_id": 50000000,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 6,
+    "hair_color": [210, 180, 90],
+    "eye_color": [255, 230, 140],
+    "skin_tone": [235, 220, 205]
+  },
+  "spawn_preference": {
+    "region": "Limgrave",
+    "zone": "Warmaster's Shack / Stormhill Crossroads",
+    "danger_tier": 1
+  }
+}

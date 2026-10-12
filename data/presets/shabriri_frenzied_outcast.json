@@ -1,0 +1,58 @@
+{
+  "preset_id": "shabriri_frenzied_outcast",
+  "name": "Frenzied Zealot Ignis",
+  "title": "Recusant of Chaos",
+  "archetype": "Frenzy Flame Lancer",
+  "gender": 0,
+  "level": 105,
+  "scaling": {
+    "hp_max": 2700,
+    "mp_max": 240,
+    "stamina_max": 175,
+    "poise": 60,
+    "runes": 19500
+  },
+  "aura": {
+    "sp_effect_aura_id": 7000,
+    "description": "Red Invader Hostile Aura"
+  },
+  "ai": {
+    "think_param_id": 100000,
+    "aggression": "Erratic Berserker",
+    "combat_style": "Frenzied Flame War Spear Charge & Madness Bursts"
+  },
+  "equipment": {
+    "head_id": 402000,
+    "head_name": "Fingerprint Helm",
+    "body_id": 402100,
+    "body_name": "Fingerprint Armor",
+    "arms_id": 402200,
+    "arms_name": "Fingerprint Gauntlets",
+    "legs_id": 402300,
+    "legs_name": "Fingerprint Greaves",
+    "right_weapon_1_id": 14040000,
+    "right_weapon_1_name": "Vyke's War Spear",
+    "right_weapon_2_id": 0,
+    "left_weapon_1_id": 34060000,
+    "left_weapon_1_name": "Frenzied Flame Seal",
+    "left_weapon_2_id": 0,
+    "arrow_id": 0,
+    "bolt_id": 0
+  },
+  "carried_loot": {
+    "guaranteed_drop": true,
+    "drop_probability_percent": 100.0,
+    "include_all_carried_gear": true
+  },
+  "appearance": {
+    "hair_mesh_id": 2,
+    "hair_color": [120, 100, 80],
+    "eye_color": [255, 180, 0],
+    "skin_tone": [190, 170, 160]
+  },
+  "spawn_preference": {
+    "region": "Liurnia of the Lakes",
+    "zone": "Frenzied Flame Village / Church of Inhibition",
+    "danger_tier": 2
+  }
+}
