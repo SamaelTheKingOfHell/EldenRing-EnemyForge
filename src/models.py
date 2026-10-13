@@ -116,8 +116,8 @@ class WorldEncounter:
 
 
 @dataclass
-class PhantomEnemy:
-    """Instantiated phantom enemy ready for regulation patching."""
+class EnemyInstance:
+    """Instantiated enemy ready for regulation patching."""
     preset: CharacterPreset
     encounter: WorldEncounter
     npc_param_id: int
@@ -127,8 +127,12 @@ class PhantomEnemy:
     carried_loot_items: List[Dict[str, Any]] = field(default_factory=list)
 
 
+# Backward-compatible alias
+PhantomEnemy = EnemyInstance
+
+
 @dataclass
-class PhantomForgeConfig:
+class EnemyForgeConfig:
     """User and generator configuration settings."""
     game_dir: str = ""
     active_regulation_path: str = ""
@@ -136,20 +140,28 @@ class PhantomForgeConfig:
     placement_mode: PlacementMode = PlacementMode.THEMATIC_REGIONAL
     guaranteed_carried_loot: bool = True
     global_drop_chance_percent: float = 100.0
-    enable_invasion_aura: bool = True
+    enable_invasion_aura: bool = False
     scale_attributes_by_tier: bool = True
     mystery_mode: bool = False
     ui_language: str = "en"
 
 
+# Backward-compatible alias
+PhantomForgeConfig = EnemyForgeConfig
+
+
 @dataclass
-class PhantomForgeManifest:
-    """Tracks forged phantoms and injected IDs for 1-click clean uninstall."""
+class EnemyForgeManifest:
+    """Tracks forged enemies and injected IDs for 1-click clean uninstall."""
     version: str = "1.0.0"
     timestamp: str = ""
     regulation_backup_file: str = ""
-    forged_phantoms: List[Dict[str, Any]] = field(default_factory=list)
+    forged_enemies: List[Dict[str, Any]] = field(default_factory=list)
     injected_npc_ids: List[int] = field(default_factory=list)
     injected_chr_asm_ids: List[int] = field(default_factory=list)
     injected_face_param_ids: List[int] = field(default_factory=list)
     injected_item_lot_ids: List[int] = field(default_factory=list)
+
+
+# Backward-compatible alias
+PhantomForgeManifest = EnemyForgeManifest

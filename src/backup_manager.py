@@ -48,17 +48,29 @@ class BackupManager:
         )
         return backup_path
 
+    def get_vanilla_fallback(self) -> Optional[Path]:
+        """Returns the vanilla base game fallback file."""
+        vanilla_bak = self.backups_dir / "regulation.bin.vanilla_fallback"
+        if vanilla_bak.exists():
+            return vanilla_bak
+        data_reg = self.backups_dir.parent / "data" / "regulation.bin"
+        if data_reg.exists():
+            return data_reg
+        return None
+
     def get_latest_backup(self) -> Optional[Path]:
-        """Returns the most recent backup in the backups directory."""
+        """Returns the most recent backup in the backups directory, or vanilla fallback."""
         backups = sorted(self.backups_dir.glob("regulation.bin.bak_*"), key=lambda p: p.stat().st_mtime, reverse=True)
-        return backups[0] if backups else None
+        if backups:
+            return backups[0]
+        return self.get_vanilla_fallback()
 
     def list_backups(self) -> List[Path]:
         """Returns all available backups sorted from newest to oldest."""
-        return sorted(self.backups_dir.glob("regulation.bin.bak_*"), key=lambda p: p.stat().st_mtime, reverse=True)
+        return sorted(self.backups_dir.glob("regulation.bin.*"), key=lambda p: p.stat().st_mtime, reverse=True)
 
     def restore_backup(self, target_reg: Path, backup_path: Optional[Path] = None) -> bool:
-        """Restores a backup over target regulation.bin."""
+        """Restores a backup over target regulation.bin with verification."""
         target = Path(target_reg).resolve()
         src = backup_path or self.get_latest_backup()
 
@@ -68,5 +80,17 @@ class BackupManager:
 
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, target)
-        system_logger.info(f"Successfully restored regulation from '{src.name}' -> '{target}'", source="BackupManager")
+        chk = self.calculate_sha256(target)
+        system_logger.info(
+            f"Successfully restored regulation from '{src.name}' -> '{target}' (SHA-256: {chk[:12]}...)",
+            source="BackupManager"
+        )
         return True
+
+    def restore_vanilla_fallback(self, target_reg: Path) -> bool:
+        """Restores pristine base game fallback regulation."""
+        vanilla = self.get_vanilla_fallback()
+        if not vanilla:
+            system_logger.error("Vanilla fallback regulation not found.", source="BackupManager")
+            return False
+        return self.restore_backup(target_reg, vanilla)

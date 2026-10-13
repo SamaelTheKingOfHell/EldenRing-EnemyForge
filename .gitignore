@@ -14,10 +14,19 @@ obj/
 *.userosscache
 *.sln.docstates
 
-# PhantomForge runtime data
+# EnemyForge runtime data
 logs/
 mod/
+enemyforge_manifest.json
 phantomforge_manifest.json
-backups/regulation.bin.bak_*
-!backups/regulation.bin.bak_20261002_135333
+config.json
+
+# Backups and snapshots (local rollback only)
+backups/regulation.bin.*
+backups/*.dcx*
 !backups/INDEX.md
+
+# Game binaries & proprietary assets (do not publish to public git)
+data/*.bin
+data/*.dcx
+!data/INDEX.md

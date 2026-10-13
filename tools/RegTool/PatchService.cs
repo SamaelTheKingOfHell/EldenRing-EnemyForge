@@ -77,22 +77,26 @@ namespace PhantomForge.RegTool
 
             var phantomNamesToInject = new List<FmgInjector.PhantomNameEntry>();
 
-            if (root.TryGetProperty("phantoms", out JsonElement phantomsArray) && phantomsArray.ValueKind == JsonValueKind.Array)
+            JsonElement enemiesArray = default;
+            bool hasEnemies = (root.TryGetProperty("enemies", out enemiesArray) && enemiesArray.ValueKind == JsonValueKind.Array) ||
+                              (root.TryGetProperty("phantoms", out enemiesArray) && enemiesArray.ValueKind == JsonValueKind.Array);
+
+            if (hasEnemies)
             {
-                Console.WriteLine($"[RegTool] Processing {phantomsArray.GetArrayLength()} character phantom(s)...");
-                foreach (JsonElement phantomSpec in phantomsArray.EnumerateArray())
+                Console.WriteLine($"[RegTool] Processing {enemiesArray.GetArrayLength()} character enemy/phantom(s)...");
+                foreach (JsonElement enemySpec in enemiesArray.EnumerateArray())
                 {
-                    string name = phantomSpec.GetProperty("name").GetString() ?? "Hostile Phantom";
-                    int npcId = phantomSpec.GetProperty("npc_param_id").GetInt32();
-                    int itemLotId = phantomSpec.GetProperty("item_lot_id").GetInt32();
+                    string name = enemySpec.GetProperty("name").GetString() ?? "World Enemy";
+                    int npcId = enemySpec.GetProperty("npc_param_id").GetInt32();
+                    int itemLotId = enemySpec.GetProperty("item_lot_id").GetInt32();
 
                     // 1. Inject Humanoid Enemy Parameters (NpcParam, CharaInitParam, FaceParam)
-                    PhantomInjector.InjectPhantomParams(npcParam, charaInitParam, faceParam, phantomSpec);
+                    EnemyInjector.InjectEnemyParams(npcParam, charaInitParam, faceParam, enemySpec);
                     phantomNamesToInject.Add(new FmgInjector.PhantomNameEntry(npcId, name));
 
                     // 2. Inject Carried Loot Drops (ItemLotParam_enemy)
                     var carriedDrops = new List<LootInjector.LootDropItem>();
-                    if (phantomSpec.TryGetProperty("carried_drops", out JsonElement dropsArray) && dropsArray.ValueKind == JsonValueKind.Array)
+                    if (enemySpec.TryGetProperty("carried_drops", out JsonElement dropsArray) && dropsArray.ValueKind == JsonValueKind.Array)
                     {
                         foreach (JsonElement dropElem in dropsArray.EnumerateArray())
                         {

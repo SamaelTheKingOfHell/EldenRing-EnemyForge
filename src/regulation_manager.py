@@ -25,31 +25,61 @@ class RegulationManager:
         self.regtool_exe = self.base_dir / "tools" / "RegTool" / "bin" / "Release" / "net9.0" / "RegTool.exe"
         self.regtool_dll = self.base_dir / "tools" / "RegTool" / "bin" / "Release" / "net9.0" / "RegTool.dll"
         self.backup_mgr = BackupManager(self.base_dir / "backups")
-        self.manifest_store = ManifestStore(self.base_dir / "phantomforge_manifest.json")
+        self.manifest_store = ManifestStore(self.base_dir / "enemyforge_manifest.json")
 
     def _get_process_env(self) -> Dict[str, str]:
-        """Ensures DOTNET_ROOT is present for RegTool invocation."""
+        """Ensures DOTNET_ROOT and PATH are configured for .NET execution."""
         env = os.environ.copy()
         if "DOTNET_ROOT" not in env:
-            local_dotnet = Path.home() / "AppData" / "Local" / "Microsoft" / "dotnet"
-            if local_dotnet.exists():
-                env["DOTNET_ROOT"] = str(local_dotnet)
-                env["PATH"] = f"{str(local_dotnet)};{env.get('PATH', '')}"
+            candidates = [
+                Path(r"C:\Program Files\dotnet"),
+                Path.home() / "AppData" / "Local" / "Microsoft" / "dotnet"
+            ]
+            for cand in candidates:
+                if cand.exists():
+                    env["DOTNET_ROOT"] = str(cand)
+                    env["PATH"] = f"{str(cand)};{env.get('PATH', '')}"
+                    break
         return env
+
+    def resolve_source_regulation(self, specified_path: Optional[Path] = None) -> Optional[Path]:
+        """Resolves source regulation with multi-tier fallback to base game data."""
+        if specified_path and Path(specified_path).exists():
+            return Path(specified_path).resolve()
+
+        # Tier 1: data/regulation.bin base template
+        data_reg = self.base_dir / "data" / "regulation.bin"
+        if data_reg.exists():
+            return data_reg
+
+        # Tier 2: backups/ regulation.bin.vanilla_fallback
+        vanilla = self.backup_mgr.get_vanilla_fallback()
+        if vanilla and vanilla.exists():
+            return vanilla
+
+        # Tier 3: Most recent timestamped backup
+        latest = self.backup_mgr.get_latest_backup()
+        if latest and latest.exists():
+            return latest
+
+        return None
 
     def execute_patch(
         self,
         patch_spec: Dict[str, Any],
-        source_reg: Path,
+        source_reg: Optional[Path],
         target_reg: Path,
         msg_dir: Optional[Path] = None
     ) -> bool:
-        """Executes the patch process via RegTool."""
-        source_path = Path(source_reg).resolve()
+        """Executes the patch process via RegTool with automatic base game fallback."""
+        source_path = self.resolve_source_regulation(source_reg)
         target_path = Path(target_reg).resolve()
 
-        if not source_path.exists():
-            system_logger.error(f"Source regulation not found: {source_path}", source="RegulationManager")
+        if not source_path or not source_path.exists():
+            system_logger.error(
+                f"Source regulation could not be resolved. Please ensure data/regulation.bin exists.",
+                source="RegulationManager"
+            )
             return False
 
         if not self.defs_dir.exists():
@@ -68,11 +98,12 @@ class RegulationManager:
         try:
             target_path.parent.mkdir(parents=True, exist_ok=True)
 
-            cmd = [
-                str(self.regtool_exe) if self.regtool_exe.exists() else "dotnet",
-            ]
-            if not self.regtool_exe.exists():
-                cmd.append(str(self.regtool_dll))
+            if self.regtool_dll.exists():
+                cmd = ["dotnet", str(self.regtool_dll)]
+            elif self.regtool_exe.exists():
+                cmd = [str(self.regtool_exe)]
+            else:
+                cmd = ["dotnet", "run", "--project", str(self.base_dir / "tools" / "RegTool" / "RegTool.csproj"), "--"]
 
             cmd.extend([
                 "patch",
@@ -99,7 +130,7 @@ class RegulationManager:
                 system_logger.info("RegTool patch completed successfully!", source="RegulationManager")
                 self.manifest_store.save(
                     backup_file=backup_name,
-                    phantoms_spec=patch_spec.get("phantoms", [])
+                    enemies_spec=patch_spec.get("enemies") or patch_spec.get("phantoms", [])
                 )
                 return True
             else:
@@ -112,8 +143,15 @@ class RegulationManager:
                 spec_file_path.unlink()
 
     def restore_regulation(self, target_reg: Path) -> bool:
-        """Restores target regulation from latest snapshot."""
+        """Restores target regulation from latest snapshot and clears manifest."""
         success = self.backup_mgr.restore_backup(target_reg)
+        if success:
+            self.manifest_store.clear()
+        return success
+
+    def rollback_to_vanilla(self, target_reg: Path) -> bool:
+        """Rolls back target regulation to the pristine base game vanilla fallback."""
+        success = self.backup_mgr.restore_vanilla_fallback(target_reg)
         if success:
             self.manifest_store.clear()
         return success

@@ -1,6 +1,6 @@
-# PhantomForge: Character Preset Enemy & Carried Loot Injector
+# EnemyForge: Character Preset Enemy & Carried Loot Injector
 
-**PhantomForge** is a cross-platform desktop application and mod engine for *Elden Ring* (Windows & Linux / Steam Deck). It transforms player character presets into formidable hostile humanoid phantoms and roaming NPC enemies across the Lands Between, and **guarantees that every phantom drops the exact weapons, shields, and armor that they carry in their build**.
+**EnemyForge** is a cross-platform desktop application and mod engine for *Elden Ring* (Windows & Linux / Steam Deck). It transforms player character presets into formidable hostile humanoid roaming enemies, duelists, minibosses, and red invaders across the Lands Between, and **guarantees that every enemy drops the exact weapons, shields, and armor that they carry in their build**.
 
 ---
 
@@ -8,24 +8,26 @@
 
 1. **Hostile Character Presets in the World**:
    - Ingests custom or built-in character presets (fashion souls, weapon arsenals, level scaling, and AI combat styles).
-   - Generates authentic humanoid enemies (`c0000`) with level-scaled attributes, poise, runes, and visual invader auras (`SpEffect 7000`).
+   - Generates authentic humanoid enemies (`c0000`) with level-scaled attributes, poise, runes, and optional flesh-and-blood models or spectral invader auras (`SpEffect 7000`).
 
 2. **Carried Loot Drops (100% on Kill)**:
-   - **"They should drop the loot that they carry"**: Defeating a phantom guarantees receiving every single piece of gear they wielded:
+   - **"They should drop the loot that they carry"**: Defeating an enemy guarantees receiving every single piece of gear they wielded:
      - Head, Chest, Gauntlets, and Greaves armor pieces.
      - Primary and secondary right-hand weapons.
      - Left-hand weapons, shields, catalysts, and seals.
-   - Automatically populates `ItemLotParam_enemy` rows linked to the phantom's `NpcParam.itemLotId_enemy`.
+   - Automatically populates `ItemLotParam_enemy` rows linked to the enemy's `NpcParam.itemLotId_enemy`.
 
 3. **Tactical World Placement Engine**:
-   - **Thematic Regional**: Matches phantom strength and equipment tier to regional difficulty (Limgrave -> Liurnia -> Caelid -> Altus Plateau -> Mountaintops).
-   - **Roaming Invasions**: Places phantoms as hostile red invaders at landmark exploration bottlenecks.
-   - **Champion Duels**: Positions phantoms at crossroads and arena approaches.
-   - **Chaos Expedition**: Shuffles phantoms across valid world encounter coordinates.
+   - **Thematic Regional**: Matches enemy strength and equipment tier to regional difficulty (Limgrave -> Liurnia -> Caelid -> Altus Plateau -> Mountaintops).
+   - **Roaming Invasions**: Places enemies as hostile red invaders at landmark exploration bottlenecks.
+   - **Champion Duels**: Positions enemies at crossroads and arena approaches.
+   - **Chaos Expedition**: Shuffles enemies across valid world encounter coordinates.
 
-4. **Safety & 1-Click Rollback**:
+4. **Base File Fallback & 1-Click Rollback**:
+   - **Base Game Fallback**: If no active `regulation.bin` is designated, EnemyForge automatically falls back to the pristine base game `regulation.bin` in `data/regulation.bin`.
+   - **1-Click Rollback**: Run `python run_enemyforge.py --rollback` or click Restore in the UI to instantly rollback the regulation to pristine vanilla state.
    - Timestamped pre-write regulation snapshots (`regulation.bin.bak_YYYYMMDD_HHMMSS`) with SHA-256 verification.
-   - Reversible manifest (`phantomforge_manifest.json`) enabling 1-click clean uninstallation.
+   - Reversible manifest (`enemyforge_manifest.json`) enabling 1-click clean uninstallation.
 
 5. **Modern Souls-Themed GUI & Real-Time Diagnostics**:
    - Deep obsidian slate surfaces, phantom crimson accents, and antique gold highlights.
@@ -56,49 +58,33 @@ Drop any custom `.json` character preset into `input_presets/`:
 }
 ```
 
-### 2. Launch PhantomForge
+### 2. Launch EnemyForge
 Run the launcher:
 
 ```bash
-python run_phantomforge.py
+python run_enemyforge.py
 ```
 
-The application will start the local server and open your default browser to `http://127.0.0.1:8484`.
+Or run headlessly via CLI:
 
-### 3. Review & Forge
-1. Click **Scan Presets** to preview presets and their carried loot.
-2. Select your preferred **World Placement Strategy** in Settings.
-3. Click **✦ Forge Phantoms & Inject Loot**.
-4. Launch Elden Ring via ModEngine 2 (`launchmod_eldenring.bat`).
+```bash
+python run_enemyforge.py --cli
+```
+
+To rollback to base vanilla state at any time:
+
+```bash
+python run_enemyforge.py --rollback
+```
 
 ---
 
 ## Project Structure
 
-```text
-PhantomForge/
-  ├── INDEX.md               # Root navigation index
-  ├── OBJECTIVE.md           # Mission statement and invariants
-  ├── ROADMAP.md             # Development roadmap
-  ├── README.md              # Project documentation
-  ├── run_phantomforge.py    # Desktop launcher & CLI runner
-  ├── rebuild_regtool.bat    # RegTool compilation script
-  ├── config.json            # Generator configuration
-  ├── data/                  # Built-in presets, encounters, and i18n
-  ├── src/                   # Python core engine
-  ├── ui/                    # Souls-themed web dashboard
-  ├── input_presets/         # User preset dropzone
-  ├── tools/                 # C# RegTool and vendor dependencies
-  ├── backups/               # Pre-write regulation backups
-  └── tests/                 # Automated test suite
-```
-
----
-
-## Testing
-
-Run the automated test suite:
-
-```bash
-python -m unittest discover tests
-```
+- `src/`: Python core engine (preset parsing, ID allocation, world encounters, backup manager, regulation coordinator).
+- `tools/RegTool/`: Native C# (.NET 9) regulation reader, decryptor, and param injector built with SoulsFormatsNEXT.
+- `data/`: Built-in archetype character presets, baseline game files, world encounters, and localization catalogs.
+- `input_presets/`: User dropzone for custom character presets.
+- `ui/`: Desktop Souls-themed interface with live WebSocket/HTTP event log streaming.
+- `backups/`: Pre-write regulation snapshots with SHA-256 verification.
+- `tests/`: Automated unit and integration test suite (`[CS-NO-MOCK]`).

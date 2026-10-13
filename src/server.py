@@ -63,6 +63,8 @@ class PhantomForgeRequestHandler(SimpleHTTPRequestHandler):
             self._handle_post_forge(payload)
         elif path == "/api/restore":
             self._handle_post_restore()
+        elif path == "/api/rollback":
+            self._handle_post_rollback()
         elif path == "/api/uninstall":
             self._handle_post_uninstall()
         else:
@@ -165,13 +167,8 @@ class PhantomForgeRequestHandler(SimpleHTTPRequestHandler):
         builder = PhantomBuilder()
         patch_spec = builder.build_patch_spec(assignments, self.config)
 
-        # 3. Resolve regulations
+        # 3. Resolve regulations with fallback
         source_reg = Path(self.config.active_regulation_path) if self.config.active_regulation_path else None
-        if not source_reg or not source_reg.exists():
-            # Fallback to reference backup
-            latest_bak = self.reg_manager.backup_mgr.get_latest_backup()
-            source_reg = latest_bak or (self.base_dir / "regulation.bin")
-
         target_reg = self.base_dir / self.config.target_mod_dir / "regulation.bin"
         msg_dir = self.base_dir / "data"
 
@@ -201,11 +198,19 @@ class PhantomForgeRequestHandler(SimpleHTTPRequestHandler):
         else:
             self._send_json({"status": "error", "message": "Restore failed"}, status=500)
 
+    def _handle_post_rollback(self) -> None:
+        target_reg = self.base_dir / self.config.target_mod_dir / "regulation.bin"
+        success = self.reg_manager.rollback_to_vanilla(target_reg)
+        if success:
+            self._send_json({"status": "success", "message": "Regulation cleanly rolled back to pristine base vanilla state"})
+        else:
+            self._send_json({"status": "error", "message": "Rollback to vanilla failed"}, status=500)
+
     def _handle_post_uninstall(self) -> None:
         target_reg = self.base_dir / self.config.target_mod_dir / "regulation.bin"
-        success = self.reg_manager.restore_regulation(target_reg)
+        success = self.reg_manager.rollback_to_vanilla(target_reg)
         self.reg_manager.manifest_store.clear()
-        self._send_json({"status": "success", "message": "Phantoms cleanly uninstalled"})
+        self._send_json({"status": "success", "message": "Enemies cleanly uninstalled and regulation rolled back"})
 
     def _handle_get_manifest(self) -> None:
         manifest = self.reg_manager.manifest_store.load()

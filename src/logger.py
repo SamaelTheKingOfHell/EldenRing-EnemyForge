@@ -16,7 +16,7 @@ class StructuredLogger:
     persists to disk, and buffers log entries for real-time UI streaming.
     """
 
-    def __init__(self, name: str = "PhantomForge", max_buffered: int = 500):
+    def __init__(self, name: str = "EnemyForge", max_buffered: int = 500):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
         self.max_buffered = max_buffered
@@ -35,7 +35,7 @@ class StructuredLogger:
     def attach_file_handler(self, log_dir: Path) -> None:
         """Attaches a rotating timestamped file log handler."""
         log_dir.mkdir(parents=True, exist_ok=True)
-        log_file = log_dir / f"phantomforge_{datetime.now().strftime('%Y%m%d')}.log"
+        log_file = log_dir / f"enemyforge_{datetime.now().strftime('%Y%m%d')}.log"
         fh = logging.FileHandler(str(log_file), encoding="utf-8")
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(logging.Formatter(
