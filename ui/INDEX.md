@@ -1,10 +1,12 @@
-# PhantomForge User Interface
+# EnemyForge User Interface
 
-Modern Souls-themed interactive web interface and controls for PhantomForge.
-Adheres to `[CS-MODULAR]` and `[CS-LOCALIZATION]`.
+Modern Dark Souls fantasy glassmorphic web interface and controls for EnemyForge.
+Adheres to `[CS-MODULAR]`, `[CS-LOCALIZATION]`, and mirrors the UI architecture of LootForge.
 
-## UI Components
+## Directory Structure
 
-| File | Purpose |
+| Path | Purpose |
 | :--- | :--- |
-| [`index.html`](file:///Z:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/PhantomForge/ui/index.html) | Single-page application rendering preset cards, carried loot drop inspects, world placement tables, settings drawer, and floating developer console. |
+| [`index.html`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/ui/index.html) | Root single-page application structuring header, target configuration, preset dropzone, staged enemies review table, and floating developer console drawer. |
+| [`css/`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/ui/css/) | Modular stylesheets (variables, typography, glassmorphism, responsive tables, developer console drawer). |
+| [`js/`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/ui/js/) | Modular frontend controllers (application state, localization, preset reviewer, and floating log console). |
