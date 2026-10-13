@@ -155,3 +155,41 @@ class RegulationManager:
         if success:
             self.manifest_store.clear()
         return success
+
+    def inspect_gear(self, source_reg: Optional[Path], output_path: Path) -> Optional[Dict[str, Any]]:
+        """Invokes RegTool inspect-gear to read installed and modded gear from regulation.bin."""
+        source_path = self.resolve_source_regulation(source_reg)
+        if not source_path or not source_path.exists():
+            return None
+
+        if self.regtool_dll.exists():
+            cmd = ["dotnet", str(self.regtool_dll)]
+        elif self.regtool_exe.exists():
+            cmd = [str(self.regtool_exe)]
+        else:
+            cmd = ["dotnet", "run", "--project", str(self.base_dir / "tools" / "RegTool" / "RegTool.csproj"), "--"]
+
+        cmd.extend([
+            "inspect-gear",
+            "--input", str(source_path),
+            "--defs", str(self.defs_dir),
+            "--output", str(output_path)
+        ])
+
+        system_logger.info(f"Inspecting regulation gear via RegTool: {' '.join(cmd)}", source="RegulationManager")
+        res = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            cwd=str(self.base_dir),
+            env=self._get_process_env(),
+            check=False
+        )
+        if res.returncode == 0 and output_path.exists():
+            try:
+                with open(output_path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        return None
+

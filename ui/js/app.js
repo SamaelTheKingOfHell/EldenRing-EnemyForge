@@ -137,6 +137,12 @@ class EnemyForgeApp {
       scanBtn.addEventListener("click", () => this.scanPresets());
     }
 
+    // Synthesize NPC Enemies button
+    const genBtn = document.getElementById("generateNpcsBtn");
+    if (genBtn) {
+      genBtn.addEventListener("click", () => this.generateNpcs());
+    }
+
     // Forge Enemies button
     const forgeBtn = document.getElementById("forgeAllBtn");
     if (forgeBtn) {
@@ -256,6 +262,8 @@ class EnemyForgeApp {
       if (injectedCountEl) {
         injectedCountEl.textContent = status.injected_count || 0;
       }
+
+      await this.checkGearCatalog();
     } catch (err) {
       console.error("Status refresh error:", err);
     }
@@ -342,9 +350,12 @@ class EnemyForgeApp {
         ? `[${preset.spawn_region}] ${preset.spawn_zone || "Encounter"}`
         : "Dynamic Regional";
 
+      const isModded = preset.preset_id.startsWith("modded_npc_") || (preset.carried_items || []).some(i => i.item_id >= 8000000);
+      const moddedBadge = isModded ? `<span class="badge badge-gold" style="font-size: 10px; margin-left: 6px;">⚡ Patched Mod Gear</span>` : "";
+
       tr.innerHTML = `
         <td>
-          <strong style="color: var(--text-primary); font-size: 15px;">${this.escapeHtml(preset.name)}</strong>
+          <strong style="color: var(--text-primary); font-size: 15px;">${this.escapeHtml(preset.name)}</strong>${moddedBadge}
           <div style="font-size: 12px; color: var(--gold-primary); margin-top: 2px;">${this.escapeHtml(preset.title || "Wandering Champion")}</div>
         </td>
         <td>
@@ -479,6 +490,58 @@ class EnemyForgeApp {
       }
     } catch (err) {
       this.showToast(`Uninstall failed: ${err.message}`, "error");
+    }
+  }
+
+  async checkGearCatalog() {
+    try {
+      const res = await fetch("/api/inspect-gear");
+      if (!res.ok) return;
+      const data = await res.json();
+      const banner = document.getElementById("moddedGearBanner");
+      const text = document.getElementById("moddedGearText");
+      if (!banner || !text) return;
+
+      const pCount = data.catalog?.modded_protectors_count || 0;
+      const wCount = data.catalog?.modded_weapons_count || 0;
+
+      if (pCount > 0 || wCount > 0) {
+        banner.style.display = "block";
+        text.innerHTML = `<strong>Modded Equipment Detected:</strong> Discovered <strong>${pCount}</strong> modded armor pieces and <strong>${wCount}</strong> modded weapons in regulation.bin! Click <em>Synthesize Modded NPC Enemies</em> to spawn them as hostile world encounters dropping this gear.`;
+      } else {
+        banner.style.display = "none";
+      }
+    } catch (err) {
+      // Non-fatal inspection
+    }
+  }
+
+  async generateNpcs() {
+    const btn = document.getElementById("generateNpcsBtn");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "✦ Synthesizing Modded NPC Enemies...";
+    }
+    try {
+      const res = await fetch("/api/generate-npcs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ count: 8 })
+      });
+      const data = await res.json();
+      if (res.ok && data.status === "success") {
+        this.showToast(`✦ Successfully synthesized ${data.generated_count} enemies!`, "success");
+        await this.scanPresets();
+      } else {
+        this.showToast(`NPC synthesis failed: ${data.message || "Error"}`, "error");
+      }
+    } catch (err) {
+      this.showToast(`NPC synthesis error: ${err.message}`, "error");
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "✦ Synthesize Modded NPC Enemies";
+      }
     }
   }
 

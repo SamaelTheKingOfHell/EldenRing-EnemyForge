@@ -20,6 +20,9 @@ mod/
 enemyforge_manifest.json
 phantomforge_manifest.json
 config.json
+data/gear_catalog.json
+input_presets/*.json
+!input_presets/INDEX.md
 
 # Backups and snapshots (local rollback only)
 backups/regulation.bin.*

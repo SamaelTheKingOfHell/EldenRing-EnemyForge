@@ -31,3 +31,13 @@
 - [x] Published public GitHub repository for community collaboration.
 - [ ] Future: Custom voice archetype assignment.
 - [ ] Future: Direct integration with character creation save file (.sl2 / .co2) preset extraction.
+
+## Phase 5: The Monster Forge (Original Creature Creation & Host Rigging) (Research Phase)
+- [x] Canonical research into FromSoftware Havok engine anatomy, FLVER v2, DummyPolys, and TAE timelines ([Research Document](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/ELDEN_RING_ORIGINAL_MONSTER_CREATION_RESEARCH_2026-10-12.md)).
+- [x] Canonical research into porting enemies from Dark Souls 1, 2, and 3 into Elden Ring ([Research Document](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/FROM_SOFTWARE_ENEMY_PORTING_RESEARCH_2026-10-12.md)).
+- [ ] Establish `CreatureArchetype` catalog in Python core (Quadrupeds `c4000`/`c4320`, Brutes `c4200`/`c4520`, Stalkers `c2010`, Dragons `c4700`).
+- [ ] Automated standalone Chr ID allocator (`c9100` - `c9499`) with container cloning (`.chrbnd`, `.anibnd`, `.behbnd`).
+- [ ] Creature Param Synthesizer: level-scaled `NpcParam`, elemental damage split generator for `AtkParam_Npc`, and `NpcThinkParam` aggression profiles.
+- [ ] Thematic Monster Loot Forge: guaranteed boss remembrances, trophies, talismans, and signature creature drops in `ItemLotParam_enemy`.
+- [ ] World Encounter Monster Placements: injecting standalone creature encounters across open world sectors via MSB Map Parts.
+- [ ] Blender starter asset packs (.blend) with pre-rigged FromSoft skeletons and positioned DummyPolys for mod authors.

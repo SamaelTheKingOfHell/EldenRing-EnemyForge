@@ -1,141 +1,397 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "description": "Curated tactical world encounter spawn points across the Lands Between for hostile NPC enemies and invaders.",
   "regions": {
     "Limgrave": {
       "danger_tier": 1,
-      "recommended_level_range": [1, 40],
+      "recommended_level_range": [1, 35],
       "encounters": [
         {
           "encounter_id": "limgrave_stormhill_crossroads",
           "name": "Stormhill Crossroads",
           "landmark": "Warmaster's Shack / Stormhill Gate",
           "coordinates": { "x": -94.2, "y": 142.5, "z": 410.8 },
-          "map_id": "m10_00_00_00",
+          "map_id": "m60_43_36_00",
           "base_enemy_id": 100000,
-          "description": "Wandering duelist patrol near Stormhill Gate"
+          "description": "Wandering duelist patrol pacing the stormy windswept crossroads near Bernahl's shack."
         },
         {
           "encounter_id": "limgrave_agheel_lake_north",
           "name": "Agheel Lake North Approach",
-          "landmark": "Agheel Lake North Site of Grace",
+          "landmark": "Agheel Lake North / Dragon-Burnt Ruins Outskirts",
           "coordinates": { "x": -52.0, "y": 95.0, "z": 380.0 },
-          "map_id": "m10_00_00_00",
+          "map_id": "m60_43_36_00",
           "base_enemy_id": 100010,
-          "description": "Hostile Tarnished scouting the dragon scorched ruins"
+          "description": "Hostile Tarnished scouting the scorched edges of Agheel Lake near the dragon-burnt ruins."
         },
         {
           "encounter_id": "limgrave_church_of_elleh_road",
           "name": "Church of Elleh Woodland Road",
-          "landmark": "Woodland between First Step and Elleh",
+          "landmark": "Woodland path between First Step and Church of Elleh",
           "coordinates": { "x": -180.0, "y": 80.0, "z": 350.0 },
-          "map_id": "m10_00_00_00",
+          "map_id": "m60_42_35_00",
           "base_enemy_id": 100020,
-          "description": "Invader stalking newcomers on the road"
+          "description": "Ruthless invader stalking newcomers on the woodland path outside Kale's sanctuary."
+        },
+        {
+          "encounter_id": "limgrave_murkwater_coast",
+          "name": "Murkwater Coast Ravine",
+          "landmark": "Murkwater Coast / Highway Greatbridge Chasm",
+          "coordinates": { "x": -25.0, "y": 70.0, "z": 420.0 },
+          "map_id": "m60_43_36_00",
+          "base_enemy_id": 100030,
+          "description": "Bloody Finger ambush waiting in the murky shadows beneath the high stone aqueduct."
+        },
+        {
+          "encounter_id": "limgrave_mistwood_periphery",
+          "name": "Mistwood Ruins Periphery",
+          "landmark": "Mistwood Outskirts / Minor Erdtree Overlook",
+          "coordinates": { "x": 120.0, "y": 85.0, "z": 340.0 },
+          "map_id": "m60_44_35_00",
+          "base_enemy_id": 100040,
+          "description": "Beast-hunting warrior lurking beneath the misty boughs near the howling ruins."
+        },
+        {
+          "encounter_id": "limgrave_forlorn_hound_bluff",
+          "name": "Forlorn Hound Evergaol Bluff",
+          "landmark": "Cliffs south of Lake Agheel overlooking the sea",
+          "coordinates": { "x": -80.0, "y": 115.0, "z": 310.0 },
+          "map_id": "m60_43_35_00",
+          "base_enemy_id": 100050,
+          "description": "Solitary Bloodhound exile guarding the ancient stone prison ring."
+        }
+      ]
+    },
+    "Weeping Peninsula": {
+      "danger_tier": 1,
+      "recommended_level_range": [20, 45],
+      "encounters": [
+        {
+          "encounter_id": "weeping_bridge_of_sacrifice",
+          "name": "Bridge of Sacrifice Redoubt",
+          "landmark": "Fortified causeway leading south from Limgrave",
+          "coordinates": { "x": -30.0, "y": 55.0, "z": 240.0 },
+          "map_id": "m60_43_34_00",
+          "base_enemy_id": 100500,
+          "description": "Heavily fortified choke point guarded by an elite knight behind ballista barricades."
+        },
+        {
+          "encounter_id": "weeping_castle_morne_approach",
+          "name": "Castle Morne Rampart Approach",
+          "landmark": "Rain-swept gallows field north of Castle Morne",
+          "coordinates": { "x": -45.0, "y": 30.0, "z": 120.0 },
+          "map_id": "m60_43_33_00",
+          "base_enemy_id": 100510,
+          "description": "Vengeful renegade pacing the battlefield of burning pyres and crucified victims."
+        },
+        {
+          "encounter_id": "weeping_ailing_village_hollow",
+          "name": "Ailing Village Outskirts",
+          "landmark": "Callu Baptismal Church / Ailing Village Hill",
+          "coordinates": { "x": -90.0, "y": 10.0, "z": 190.0 },
+          "map_id": "m60_42_34_00",
+          "base_enemy_id": 100520,
+          "description": "Frenzied zealot stricken with golden madness patrolling the pestilent woods."
+        },
+        {
+          "encounter_id": "weeping_witchbane_ruins",
+          "name": "Witchbane Ruins Periphery",
+          "landmark": "Mossy coastal ruins west of the Demi-Human Forest",
+          "coordinates": { "x": -150.0, "y": 40.0, "z": 180.0 },
+          "map_id": "m60_41_34_00",
+          "base_enemy_id": 100530,
+          "description": "Rogue sorcerer sentinel warding the entrance to Sellen's subterranean chains."
         }
       ]
     },
     "Liurnia": {
       "danger_tier": 2,
-      "recommended_level_range": [40, 70],
+      "recommended_level_range": [40, 75],
       "encounters": [
         {
           "encounter_id": "liurnia_academy_gate_town",
           "name": "Academy Gate Town Flooded Square",
-          "landmark": "Sunken courtyard east of Academy",
+          "landmark": "Sunken courtyard east of Academy of Raya Lucaria",
           "coordinates": { "x": -220.0, "y": 65.0, "z": 850.0 },
-          "map_id": "m11_00_00_00",
+          "map_id": "m60_41_40_00",
           "base_enemy_id": 101000,
-          "description": "Rogue sorcery mercenary patrolling the flooded ruins"
+          "description": "Rogue Carian sorcery mercenary patrolling the flooded ruins amidst giant crayfish."
         },
         {
           "encounter_id": "liurnia_bellum_highway",
           "name": "Bellum Highway Grand Lift Approach",
-          "landmark": "Grand Lift of Dectus Ascent",
+          "landmark": "Grand Lift of Dectus Ascent / Bellum Church",
           "coordinates": { "x": -140.0, "y": 210.0, "z": 1200.0 },
-          "map_id": "m11_00_00_00",
+          "map_id": "m60_42_44_00",
           "base_enemy_id": 101010,
-          "description": "Hostile knight guarding the ascent to Altus"
+          "description": "Hostile knight blocking the historic pilgrim road to the Grand Lift of Dectus."
         },
         {
           "encounter_id": "liurnia_frenzied_flame_village",
           "name": "Frenzied Flame Village Outskirts",
           "landmark": "Approach below Ailing Village / Church of Inhibition",
           "coordinates": { "x": 110.0, "y": 250.0, "z": 1100.0 },
-          "map_id": "m11_00_00_00",
+          "map_id": "m60_44_43_00",
           "base_enemy_id": 101020,
-          "description": "Madness-crazed warrior intercepting pilgrims"
+          "description": "Madness-crazed warrior intercepting pilgrims ascending to the burning tower."
+        },
+        {
+          "encounter_id": "liurnia_three_sisters_plateau",
+          "name": "Three Sisters Moonrise Terrace",
+          "landmark": "Ranni's Rise / Royal Moongazing Grounds Outskirts",
+          "coordinates": { "x": -280.0, "y": 320.0, "z": 1150.0 },
+          "map_id": "m60_40_43_00",
+          "base_enemy_id": 101030,
+          "description": "Elite Carian royal defender guarding the gateway into Ranni's celestial sanctuary."
+        },
+        {
+          "encounter_id": "liurnia_temple_quarter_pavilion",
+          "name": "Temple Quarter Sunken Pavilion",
+          "landmark": "Submerged rooftops west of Academy Gate Town",
+          "coordinates": { "x": -290.0, "y": 60.0, "z": 820.0 },
+          "map_id": "m60_40_40_00",
+          "base_enemy_id": 101040,
+          "description": "Cold glintstone duelist guarding a sunken glintstone treasure trove."
+        },
+        {
+          "encounter_id": "liurnia_church_of_vows_plateau",
+          "name": "Church of Vows Crossroads",
+          "landmark": "High plateau overlook south of the Artist's Shack",
+          "coordinates": { "x": -110.0, "y": 140.0, "z": 920.0 },
+          "map_id": "m60_43_41_00",
+          "base_enemy_id": 101050,
+          "description": "Honor-bound champion challenging warriors on the tranquil sanctuary bluffs."
+        },
+        {
+          "encounter_id": "liurnia_ruin_strewn_precipice",
+          "name": "Ruin-Strewn Precipice Ravine",
+          "landmark": "Ravine-Veiled Village base below Magma Wyrm Makar",
+          "coordinates": { "x": -190.0, "y": 280.0, "z": 1280.0 },
+          "map_id": "m60_41_45_00",
+          "base_enemy_id": 101060,
+          "description": "Miners' renegade guardian defending the treacherous cliffs bypassing the Grand Lift."
         }
       ]
     },
     "Caelid": {
       "danger_tier": 3,
-      "recommended_level_range": [60, 90],
+      "recommended_level_range": [60, 95],
       "encounters": [
         {
           "encounter_id": "caelid_swamp_of_aeonia",
           "name": "Swamp of Aeonia Scarlet Dunes",
-          "landmark": "Rot-choked swamps near Sellia Gateway",
+          "landmark": "Rot-choked swamps near Sellia Gateway / Commander O'Neil",
           "coordinates": { "x": 380.0, "y": 45.0, "z": 210.0 },
-          "map_id": "m12_00_00_00",
+          "map_id": "m60_46_36_00",
           "base_enemy_id": 102000,
-          "description": "Scarlet Rot cultist prowling the toxic wastes"
+          "description": "Rot-worshipping kindred cultist prowling the toxic scarlet mudflats."
         },
         {
           "encounter_id": "caelid_church_of_the_plague",
           "name": "Church of the Plague Terrace",
-          "landmark": "Terrace cliffside overlooking Sellia",
+          "landmark": "Terrace cliffside overlooking Sellia Town of Sorcery",
           "coordinates": { "x": 420.0, "y": 120.0, "z": 240.0 },
-          "map_id": "m12_00_00_00",
+          "map_id": "m60_47_37_00",
           "base_enemy_id": 102010,
-          "description": "Fierce Bloody Finger invasion at the cliff edge"
+          "description": "Fierce Millicent-hunting invader guarding the cliff steps above Sellia."
+        },
+        {
+          "encounter_id": "caelid_smoldering_church_border",
+          "name": "Smoldering Church Frontier",
+          "landmark": "Red soil frontier border between Limgrave and Caelid",
+          "coordinates": { "x": 210.0, "y": 160.0, "z": 430.0 },
+          "map_id": "m60_45_38_00",
+          "base_enemy_id": 102020,
+          "description": "Blood-drenched butcher ambushing travelers right at the boundary of rot."
+        },
+        {
+          "encounter_id": "caelid_sellia_backstreets",
+          "name": "Sellia Town of Sorcery Backstreets",
+          "landmark": "Rooftops and barrier shrines of Sellia",
+          "coordinates": { "x": 390.0, "y": 90.0, "z": 280.0 },
+          "map_id": "m60_46_37_00",
+          "base_enemy_id": 102030,
+          "description": "Night sorcery inquisitor lurking along the crimson tile rooftops of Sellia."
+        },
+        {
+          "encounter_id": "caelid_bestial_sanctum_promenade",
+          "name": "Bestial Sanctum Promenade",
+          "landmark": "Dragonbarrow northern terminus / Gurranq's Sanctum road",
+          "coordinates": { "x": 480.0, "y": 240.0, "z": 460.0 },
+          "map_id": "m60_47_40_00",
+          "base_enemy_id": 102040,
+          "description": "Savage beast-claw warrior prowling the windblown pavement before the Black Blade Kindred."
+        },
+        {
+          "encounter_id": "caelid_farum_greatbridge_approach",
+          "name": "Farum Greatbridge Ascent",
+          "landmark": "Great stone bridge guarded by Flying Dragon Greyll",
+          "coordinates": { "x": 450.0, "y": 200.0, "z": 410.0 },
+          "map_id": "m60_47_39_00",
+          "base_enemy_id": 102050,
+          "description": "Dragon cultist duelist testing trespassers challenging the great bridge."
         }
       ]
     },
     "Altus Plateau": {
       "danger_tier": 4,
-      "recommended_level_range": [70, 110],
+      "recommended_level_range": [75, 115],
       "encounters": [
         {
           "encounter_id": "altus_rampartside_path",
           "name": "Rampartside Path Junction",
-          "landmark": "Noble's Gold Road approaching Leyndell",
+          "landmark": "Noble's Gold Road approaching Leyndell Royal Capital",
           "coordinates": { "x": -50.0, "y": 280.0, "z": 1450.0 },
-          "map_id": "m13_00_00_00",
+          "map_id": "m60_43_46_00",
           "base_enemy_id": 103000,
-          "description": "Crucible challenger challenging passing champions"
+          "description": "Crucible challenger challenging passing champions along the golden leaf road."
         },
         {
           "encounter_id": "altus_windmill_village_approach",
           "name": "Windmill Village Southern Ascent",
-          "landmark": "Dominula hill approach",
+          "landmark": "Dominula hill approach / Festive celebration outskirts",
           "coordinates": { "x": 20.0, "y": 310.0, "z": 1600.0 },
-          "map_id": "m13_00_00_00",
+          "map_id": "m60_44_47_00",
           "base_enemy_id": 103010,
-          "description": "Grim Black Knife sentry awaiting prey"
+          "description": "Grim festive celebrant champion dancing upon the blood-stained floral crest."
+        },
+        {
+          "encounter_id": "altus_woodfolk_ruins_fog",
+          "name": "Woodfolk Ruins Phantom Woods",
+          "landmark": "Golden autumnal forest shrouded in deathblight fog",
+          "coordinates": { "x": -10.0, "y": 260.0, "z": 1420.0 },
+          "map_id": "m60_43_45_00",
+          "base_enemy_id": 103020,
+          "description": "Deathblight herald stalking through the thick golden mist among Wormfaces."
+        },
+        {
+          "encounter_id": "altus_shaded_castle_poison_moat",
+          "name": "Shaded Castle Poison Moat",
+          "landmark": "Bramble-choked sunken courtyard north of Altus",
+          "coordinates": { "x": -120.0, "y": 340.0, "z": 1510.0 },
+          "map_id": "m60_42_47_00",
+          "base_enemy_id": 103030,
+          "description": "Briar-clad executioner hunting trespassers in the toxic rampart muck."
+        },
+        {
+          "encounter_id": "altus_bridge_of_iniquity",
+          "name": "Bridge of Iniquity Volcanic Crag",
+          "landmark": "Rope bridge crossing into Mt. Gelmir's war-torn cliffs",
+          "coordinates": { "x": -180.0, "y": 380.0, "z": 1580.0 },
+          "map_id": "m60_41_48_00",
+          "base_enemy_id": 103040,
+          "description": "Volcano Manor recusant lying in wait at the war-ravaged mountain crossing."
+        },
+        {
+          "encounter_id": "altus_hermit_village_approach",
+          "name": "Hermit Village Magma Overlook",
+          "landmark": "Hermit Village / Primeval Sorcerer Azur Cliff",
+          "coordinates": { "x": -250.0, "y": 420.0, "z": 1650.0 },
+          "map_id": "m60_40_49_00",
+          "base_enemy_id": 103050,
+          "description": "Primeval comet zealot guarding the frozen glintstone body of Master Azur."
         }
       ]
     },
     "Mountaintops": {
       "danger_tier": 5,
-      "recommended_level_range": [100, 150],
+      "recommended_level_range": [105, 160],
       "encounters": [
         {
           "encounter_id": "mountaintops_freezing_lake",
           "name": "Freezing Lake Blizzard Expanse",
-          "landmark": "Frozen expanse near First Church of Marika",
+          "landmark": "Frozen expanse near First Church of Marika / Borealis",
           "coordinates": { "x": 620.0, "y": 480.0, "z": 1820.0 },
-          "map_id": "m14_00_00_00",
+          "map_id": "m60_50_51_00",
           "base_enemy_id": 104000,
-          "description": "Frost-bitten champion roaming the blinding blizzards"
+          "description": "Frost-bitten champion roaming the blinding whiteout blizzards of the frozen lake."
         },
         {
           "encounter_id": "mountaintops_giants_gravepost",
           "name": "Giant's Gravepost Precipice",
-          "landmark": "Precipice leading toward Forge of the Giants",
+          "landmark": "Precipice leading toward Forge of the Giants / Giant Conquering Peak",
           "coordinates": { "x": 750.0, "y": 520.0, "z": 1950.0 },
-          "map_id": "m14_00_00_00",
+          "map_id": "m60_51_52_00",
           "base_enemy_id": 104010,
-          "description": "Colossal warrior testing strength against travelers"
+          "description": "Colossal fire-monk challenger testing traveler strength on the final frozen ridge."
+        },
+        {
+          "encounter_id": "mountaintops_zamor_ruins_streets",
+          "name": "Zamor Ruins Howling Alleys",
+          "landmark": "Ancient frost-bitten ruins directly above Grand Lift of Rold",
+          "coordinates": { "x": 520.0, "y": 440.0, "z": 1750.0 },
+          "map_id": "m60_49_50_00",
+          "base_enemy_id": 104020,
+          "description": "Ice-storm warrior wielding howling blizzard arts amongst the ancient monoliths."
+        },
+        {
+          "encounter_id": "mountaintops_castle_sol_ramparts",
+          "name": "Castle Sol Eclipse Overlook",
+          "landmark": "Windswept plateau below Castle Sol / Commander Niall",
+          "coordinates": { "x": 580.0, "y": 560.0, "z": 1890.0 },
+          "map_id": "m60_50_53_00",
+          "base_enemy_id": 104030,
+          "description": "Banished knight veteran guarding the road to the Eclipse Haligtree medallion."
+        },
+        {
+          "encounter_id": "snowfield_ordina_periphery",
+          "name": "Ordina Liturgical Town Periphery",
+          "landmark": "Frozen town approaches below the Haligtree teleporter",
+          "coordinates": { "x": 420.0, "y": 580.0, "z": 1780.0 },
+          "map_id": "m60_48_54_00",
+          "base_enemy_id": 104040,
+          "description": "Black Knife shadow archer stalking the frozen rooftops of the silent town."
+        },
+        {
+          "encounter_id": "snowfield_yelough_anix_crater",
+          "name": "Yelough Anix Ruins Madness Crater",
+          "landmark": "Frenzied Flame crater in southwestern Consecrated Snowfield",
+          "coordinates": { "x": 340.0, "y": 510.0, "z": 1710.0 },
+          "map_id": "m60_47_52_00",
+          "base_enemy_id": 104050,
+          "description": "Frenzied frost outcast consumed by the Three Fingers howling in the snow."
+        }
+      ]
+    },
+    "Subterranean Rivers": {
+      "danger_tier": 3,
+      "recommended_level_range": [50, 90],
+      "encounters": [
+        {
+          "encounter_id": "siofra_hallowhorn_grounds",
+          "name": "Siofra River Bank / Hallowhorn Woods",
+          "landmark": "Ancient glowing pillars below Limgrave / Ancestor Spirit steps",
+          "coordinates": { "x": 180.0, "y": -120.0, "z": 620.0 },
+          "map_id": "m12_00_00_00",
+          "base_enemy_id": 105000,
+          "description": "Horned ancestral stalker stalking between the star-lit glowing pillars."
+        },
+        {
+          "encounter_id": "ainsel_uhl_palace_ruins",
+          "name": "Uhl Palace Ruins Overlook",
+          "landmark": "Flooded subterranean temple ruins / Malformed Star chasm",
+          "coordinates": { "x": -150.0, "y": -180.0, "z": 950.0 },
+          "map_id": "m12_01_00_00",
+          "base_enemy_id": 105010,
+          "description": "Clay golem duelist guarding the ancient stone arches under the cavern ceiling."
+        },
+        {
+          "encounter_id": "deeproot_nameless_city",
+          "name": "Nameless Eternal City Drowned Roots",
+          "landmark": "Sunken stone architecture beneath the Great Waterfall Crest",
+          "coordinates": { "x": 20.0, "y": -220.0, "z": 1100.0 },
+          "map_id": "m12_02_00_00",
+          "base_enemy_id": 105020,
+          "description": "Prince of Death follower wielding dark ghostflame sorceries among the petrified roots."
+        },
+        {
+          "encounter_id": "mohgwyn_blood_marsh_ascent",
+          "name": "Mohgwyn Dynasty Mausoleum Approach",
+          "landmark": "Red blood lake below Dynasty Mausoleum Entrance",
+          "coordinates": { "x": 350.0, "y": -290.0, "z": 780.0 },
+          "map_id": "m12_03_00_00",
+          "base_enemy_id": 105030,
+          "description": "Nameless White Mask killer waiting in the crimson muck for Lord of Blood sacrifices."
         }
       ]
     }

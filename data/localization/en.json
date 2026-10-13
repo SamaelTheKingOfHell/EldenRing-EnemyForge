@@ -30,6 +30,7 @@
   "label_invasion_aura": "Red Invader Phantom Glow",
   "label_danger_scaling": "Danger Tier Attribute Scaling",
   "btn_scan_presets": "Scan & Analyze Presets",
+  "btn_generate_npcs": "✦ Synthesize Modded NPC Enemies",
   "section_review_table": "Staged Enemies & World Route Review",
   "th_preset_name": "Character Preset",
   "th_archetype": "Combat Archetype",

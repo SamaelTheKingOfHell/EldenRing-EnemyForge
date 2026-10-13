@@ -16,6 +16,7 @@ from src.world_placer import WorldPlacer
 from src.id_allocator import IdAllocator
 from src.enemy_builder import EnemyBuilder
 from src.regulation_manager import RegulationManager
+from src.npc_generator import NPCGenerator
 from src.logger import system_logger
 
 
@@ -27,6 +28,7 @@ class EnemyForgeRequestHandler(SimpleHTTPRequestHandler):
     preset_loader: PresetLoader
     world_placer: WorldPlacer
     reg_manager: RegulationManager
+    npc_generator: NPCGenerator
 
     def do_GET(self) -> None:
         parsed_url = urllib.parse.urlparse(self.path)
@@ -46,6 +48,8 @@ class EnemyForgeRequestHandler(SimpleHTTPRequestHandler):
                 self._handle_get_manifest()
             elif path == "/api/logs":
                 self._handle_get_logs()
+            elif path == "/api/inspect-gear":
+                self._handle_get_gear_inspection()
             elif path == "/api/localization" or path.startswith("/api/localization/"):
                 lang = query_params.get("lang", [None])[0]
                 if not lang and path.startswith("/api/localization/"):
@@ -71,6 +75,8 @@ class EnemyForgeRequestHandler(SimpleHTTPRequestHandler):
             self._handle_post_config(payload)
         elif path == "/api/forge":
             self._handle_post_forge(payload)
+        elif path == "/api/generate-npcs":
+            self._handle_post_generate_npcs(payload)
         elif path == "/api/backup":
             self._handle_post_backup()
         elif path == "/api/restore":
@@ -282,6 +288,53 @@ class EnemyForgeRequestHandler(SimpleHTTPRequestHandler):
         self.reg_manager.manifest_store.clear()
         self._send_json({"status": "success", "message": "Enemies cleanly uninstalled and regulation rolled back"})
 
+    def _handle_get_gear_inspection(self) -> None:
+        source_reg = self.reg_manager.resolve_source_regulation(
+            Path(self.config.active_regulation_path) if self.config.active_regulation_path else None
+        )
+        if not source_reg or not source_reg.exists():
+            self._send_json({"status": "error", "message": "Regulation not found"}, status=404)
+            return
+
+        catalog_file = self.base_dir / "data" / "gear_catalog.json"
+        catalog = self.reg_manager.inspect_gear(source_reg, catalog_file)
+        if catalog:
+            self._send_json({"status": "success", "catalog": catalog})
+        else:
+            self._send_json({
+                "status": "success",
+                "catalog": {
+                    "modded_protectors_count": 0,
+                    "modded_weapons_count": 0,
+                    "modded_protectors": [],
+                    "modded_weapons": []
+                }
+            })
+
+    def _handle_post_generate_npcs(self, payload: Dict[str, Any]) -> None:
+        count = int(payload.get("count", 8))
+        source_reg = self.reg_manager.resolve_source_regulation(
+            Path(self.config.active_regulation_path) if self.config.active_regulation_path else None
+        )
+
+        catalog = None
+        if source_reg and source_reg.exists():
+            catalog_file = self.base_dir / "data" / "gear_catalog.json"
+            catalog = self.reg_manager.inspect_gear(source_reg, catalog_file)
+
+        if catalog and (catalog.get("modded_protectors") or catalog.get("modded_weapons")):
+            generated = self.npc_generator.generate_from_gear_catalog(catalog, count_limit=count)
+        else:
+            generated = self.npc_generator.generate_thematic_presets(count=count)
+
+        self._send_json({
+            "status": "success",
+            "message": f"Successfully generated {len(generated)} NPC enemies!",
+            "generated_count": len(generated),
+            "modded_sets_detected": catalog.get("modded_protectors_count", 0) if catalog else 0,
+            "generated_names": [p.name for p in generated]
+        })
+
     def _handle_get_manifest(self) -> None:
         manifest = self.reg_manager.manifest_store.load()
         self._send_json(manifest.__dict__)
@@ -316,7 +369,11 @@ def start_server(base_dir: Path, port: int = 8484) -> HTTPServer:
         encounters_file=base_dir / "data" / "world_encounters.json"
     )
     EnemyForgeRequestHandler.reg_manager = RegulationManager(base_dir)
+    EnemyForgeRequestHandler.npc_generator = NPCGenerator(
+        output_presets_dir=base_dir / "input_presets"
+    )
 
     server = HTTPServer(("127.0.0.1", port), EnemyForgeRequestHandler)
     system_logger.info(f"EnemyForge server listening at http://127.0.0.1:{port}", source="Server")
     return server
+

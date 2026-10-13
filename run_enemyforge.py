@@ -14,6 +14,7 @@ from src.preset_loader import PresetLoader
 from src.world_placer import WorldPlacer
 from src.enemy_builder import EnemyBuilder
 from src.regulation_manager import RegulationManager
+from src.npc_generator import NPCGenerator
 from src.models import EnemyForgeConfig, PlacementMode
 
 
@@ -53,6 +54,26 @@ def run_headless_forge(base_dir: Path) -> int:
         return 1
 
 
+def run_generate_npcs(base_dir: Path, count: int = 8) -> int:
+    """Synthesizes NPC enemies from regulation modded sets or thematic archetypes."""
+    system_logger.info(f"Synthesizing {count} NPC enemies from regulation / archetypes...", source="CLI")
+    reg_manager = RegulationManager(base_dir)
+    source_reg = reg_manager.resolve_source_regulation()
+    catalog = None
+    if source_reg and source_reg.exists():
+        temp_catalog = base_dir / "data" / "gear_catalog.json"
+        catalog = reg_manager.inspect_gear(source_reg, temp_catalog)
+
+    generator = NPCGenerator(output_presets_dir=base_dir / "input_presets")
+    if catalog and (catalog.get("modded_protectors") or catalog.get("modded_weapons")):
+        generated = generator.generate_from_gear_catalog(catalog, count_limit=count)
+    else:
+        generated = generator.generate_thematic_presets(count=count)
+
+    system_logger.info(f"Synthesized {len(generated)} NPC enemies into input_presets/!", source="CLI")
+    return 0
+
+
 def run_rollback(base_dir: Path) -> int:
     """Rolls back the target regulation to the base game vanilla fallback."""
     system_logger.info("Executing rollback to pristine base vanilla regulation...", source="CLI")
@@ -70,6 +91,8 @@ def run_rollback(base_dir: Path) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description="EnemyForge: Character Preset Enemy & Carried Loot Injector")
     parser.add_argument("--cli", action="store_true", help="Run headlessly via CLI without starting the web UI")
+    parser.add_argument("--generate-npcs", action="store_true", help="Synthesize NPC enemies from regulation modded sets or archetypes")
+    parser.add_argument("--count", type=int, default=8, help="Number of NPCs to synthesize (default: 8)")
     parser.add_argument("--rollback", action="store_true", help="Roll back mod regulation to base game vanilla state")
     parser.add_argument("--port", type=int, default=8484, help="Port for the interactive interface (default: 8484)")
     parser.add_argument("--no-browser", action="store_true", help="Do not automatically launch web browser")
@@ -79,6 +102,9 @@ def main() -> int:
 
     # Setup file logging
     system_logger.attach_file_handler(base_dir / "logs")
+
+    if args.generate_npcs:
+        return run_generate_npcs(base_dir, count=args.count)
 
     if args.rollback:
         return run_rollback(base_dir)

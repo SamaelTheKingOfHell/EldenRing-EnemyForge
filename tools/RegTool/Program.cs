@@ -35,6 +35,11 @@ namespace PhantomForge.RegTool
                         DiagnosticService.VerifyRegulation(options["--input"]);
                         return 0;
 
+                    case "inspect-gear":
+                        ValidateRequiredOptions(options, "--input", "--defs", "--output");
+                        GearInspectorService.InspectGear(options);
+                        return 0;
+
                     default:
                         Console.Error.WriteLine($"[RegTool ERROR] Unknown command: '{command}'");
                         PrintHelp();
@@ -83,6 +88,7 @@ namespace PhantomForge.RegTool
             Console.WriteLine("Usage:");
             Console.WriteLine("  RegTool patch --input <source_reg> --output <target_reg> --defs <paramdex_defs> --spec <phantom_spec.json> [--msg <msg_dir>]");
             Console.WriteLine("  RegTool verify --input <regulation.bin>");
+            Console.WriteLine("  RegTool inspect-gear --input <regulation.bin> --defs <paramdex_defs> --output <gear_catalog.json>");
         }
     }
 }
