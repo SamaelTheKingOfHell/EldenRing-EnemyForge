@@ -88,39 +88,50 @@ def run_rollback(base_dir: Path) -> int:
         return 1
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="EnemyForge: Character Preset Enemy & Carried Loot Injector")
-    parser.add_argument("--cli", action="store_true", help="Run headlessly via CLI without starting the web UI")
-    parser.add_argument("--generate-npcs", action="store_true", help="Synthesize NPC enemies from regulation modded sets or archetypes")
-    parser.add_argument("--count", type=int, default=8, help="Number of NPCs to synthesize (default: 8)")
-    parser.add_argument("--rollback", action="store_true", help="Roll back mod regulation to base game vanilla state")
-    parser.add_argument("--port", type=int, default=8484, help="Port for the interactive interface (default: 8484)")
-    parser.add_argument("--no-browser", action="store_true", help="Do not automatically launch web browser")
-    args = parser.parse_args()
+def run_prototype_priscilla(base_dir: Path) -> int:
+    """Extracts Crossbreed Priscilla from local DS1 PTDE and injects her at the tutorial cave exit."""
+    from src.cross_game.prototype_orchestrator import PrototypeOrchestrator
+    orchestrator = PrototypeOrchestrator(base_dir)
+    try:
+        manifest = orchestrator.run_priscilla_prototype()
+        print(f"\n=======================================================")
+        print(f" PROTOTYPE INJECTION SUCCESSFUL: Crossbreed Priscilla")
+        print(f" Source Installation: {manifest['source_game_path']}")
+        print(f" Extracted Assets: {manifest['extracted_assets_count']} files")
+        print(f" Location: {manifest['encounter']['name']}")
+        print(f" Coordinates: {manifest['encounter']['coordinates']}")
+        print(f" Carried Drops: Lifehunt Scythe, White Fur Robe, Remembrance")
+        print(f"=======================================================\n")
+        return 0
+    except Exception as e:
+        system_logger.error(f"Priscilla prototype failed: {e}", source="CLI")
+        print(f"Error: {e}")
+        return 1
 
-    base_dir = Path(__file__).resolve().parent
 
-    # Setup file logging
-    system_logger.attach_file_handler(base_dir / "logs")
+def run_qt_app(base_dir: Path) -> int:
+    """Launches native Qt GUI desktop interface."""
+    try:
+        from src.qt_app import main as qt_main
+        system_logger.info("Starting EnemyForge native Qt desktop interface...", source="Launcher")
+        qt_main()
+        return 0
+    except Exception as e:
+        system_logger.error(f"Failed to start Qt interface: {e}; falling back to web server.", source="Launcher")
+        return run_web_server(base_dir)
 
-    if args.generate_npcs:
-        return run_generate_npcs(base_dir, count=args.count)
 
-    if args.rollback:
-        return run_rollback(base_dir)
-
-    if args.cli:
-        return run_headless_forge(base_dir)
-
-    server = start_server(base_dir, port=args.port)
-    url = f"http://127.0.0.1:{args.port}"
+def run_web_server(base_dir: Path, port: int = 8484, no_browser: bool = False) -> int:
+    """Starts cross-platform web server and browser."""
+    server = start_server(base_dir, port=port)
+    url = f"http://127.0.0.1:{port}"
 
     print(f"\n=======================================================")
-    print(f" EnemyForge is running at: {url}")
+    print(f" EnemyForge Web Server running at: {url}")
     print(f" Press Ctrl+C to terminate.")
     print(f"=======================================================\n")
 
-    if not args.no_browser:
+    if not no_browser:
         try:
             webbrowser.open(url)
         except Exception:
@@ -132,9 +143,44 @@ def main() -> int:
         print("\nShutting down EnemyForge...")
         server.server_close()
         return 0
-
     return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="EnemyForge: Character Preset Enemy & Carried Loot Injector")
+    parser.add_argument("--web", action="store_true", help="Launch interactive browser web interface instead of native Qt GUI")
+    parser.add_argument("--cli", action="store_true", help="Run headlessly via CLI without starting any GUI")
+    parser.add_argument("--prototype-priscilla", action="store_true", help="Extract and port Crossbreed Priscilla from local DS1 PTDE to the tutorial cave exit")
+    parser.add_argument("--generate-npcs", action="store_true", help="Synthesize NPC enemies from regulation modded sets or archetypes")
+    parser.add_argument("--count", type=int, default=8, help="Number of NPCs to synthesize (default: 8)")
+    parser.add_argument("--rollback", action="store_true", help="Roll back mod regulation to base game vanilla state")
+    parser.add_argument("--port", type=int, default=8484, help="Port for the interactive web interface (default: 8484)")
+    parser.add_argument("--no-browser", action="store_true", help="Do not automatically launch web browser when using --web")
+    args = parser.parse_args()
+
+    base_dir = Path(__file__).resolve().parent
+
+    # Setup file logging
+    system_logger.attach_file_handler(base_dir / "logs")
+
+    if args.prototype_priscilla:
+        return run_prototype_priscilla(base_dir)
+
+    if args.generate_npcs:
+        return run_generate_npcs(base_dir, count=args.count)
+
+    if args.rollback:
+        return run_rollback(base_dir)
+
+    if args.cli:
+        return run_headless_forge(base_dir)
+
+    if args.web:
+        return run_web_server(base_dir, port=args.port, no_browser=args.no_browser)
+
+    return run_qt_app(base_dir)
 
 
 if __name__ == "__main__":
     sys.exit(main())
+

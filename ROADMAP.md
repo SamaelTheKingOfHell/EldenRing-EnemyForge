@@ -18,11 +18,16 @@
 - [x] 16-bit row limit validation (`ushort.MaxValue`) and cell type coercion (`ParamHelper.cs`).
 
 ## Phase 3: Desktop UI & Localization (Completed)
-- [x] Souls-themed dashboard (obsidian slate `#08090d`, phantom crimson `#dc2626`, antique gold `#c5a059`).
-- [x] Interactive preset inspector cards displaying carried loot drops.
-- [x] World encounter placement table and settings drawer.
+- [x] Native PyQt6 / PySide6 desktop application (`src/qt_app.py`) matching LootForge's architecture and design patterns.
+- [x] Dark Souls themed QSS stylesheet (`src/ui/theme.py`) with gold and crimson accents.
+- [x] Schema-driven parameter cards (`src/ui/param_schema.py`, `src/ui/param_widget_factory.py`) decoupling configuration from layout.
+- [x] Interactive preset inspector cards (`src/ui/preset_inspector.py`) displaying carried loadouts and guaranteed drop tables.
+- [x] Asynchronous Priscilla cross-game porting card and worker thread (`src/ui/prototype_card.py`).
+- [x] Collapsible Mod Manager / Mod Engine 2 notice banner.
 - [x] Floating real-time developer console (`[CS-DEBUG]`).
 - [x] Centralized English and Portuguese (BR) localization catalogs (`[CS-LOCALIZATION]`).
+- [x] Browser web server retained as optional fallback via `--web`.
+
 
 ## Phase 4: Automated Verification & Expansion (Active)
 - [x] Unit test suite verifying preset loading, carried loot generation, and ID allocation.
@@ -35,6 +40,7 @@
 ## Phase 5: The Monster Forge (Original Creature Creation & Host Rigging) (Research Phase)
 - [x] Canonical research into FromSoftware Havok engine anatomy, FLVER v2, DummyPolys, and TAE timelines ([Research Document](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/ELDEN_RING_ORIGINAL_MONSTER_CREATION_RESEARCH_2026-10-12.md)).
 - [x] Canonical research into porting enemies from Dark Souls 1, 2, and 3 into Elden Ring ([Research Document](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/FROM_SOFTWARE_ENEMY_PORTING_RESEARCH_2026-10-12.md)).
+- [x] Automated cross-game pilot prototype: Crossbreed Priscilla extracted from local DS1 PTDE and injected at the tutorial cave exit threshold ([Pipeline Document](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/PRISCILLA_PROTOTYPE_PIPELINE.md)).
 - [ ] Establish `CreatureArchetype` catalog in Python core (Quadrupeds `c4000`/`c4320`, Brutes `c4200`/`c4520`, Stalkers `c2010`, Dragons `c4700`).
 - [ ] Automated standalone Chr ID allocator (`c9100` - `c9499`) with container cloning (`.chrbnd`, `.anibnd`, `.behbnd`).
 - [ ] Creature Param Synthesizer: level-scaled `NpcParam`, elemental damage split generator for `AtkParam_Npc`, and `NpcThinkParam` aggression profiles.

@@ -140,9 +140,11 @@ class EnemyForgeConfig:
     placement_mode: PlacementMode = PlacementMode.THEMATIC_REGIONAL
     guaranteed_carried_loot: bool = True
     global_drop_chance_percent: float = 100.0
+    scaling_factor: float = 1.0
     enable_invasion_aura: bool = False
     scale_attributes_by_tier: bool = True
     mystery_mode: bool = False
+
     ui_language: str = "en"
 
 

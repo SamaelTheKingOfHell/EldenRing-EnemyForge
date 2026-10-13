@@ -32,4 +32,6 @@ backups/*.dcx*
 # Game binaries & proprietary assets (do not publish to public git)
 data/*.bin
 data/*.dcx
+data/extracted_assets/
 !data/INDEX.md
+

@@ -12,7 +12,8 @@ Adheres strictly to the guidelines of The Order (`[CS-MODULAR]`, `[CS-DECOUPLE]`
 | [`OBJECTIVE.md`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/OBJECTIVE.md) | Architectural invariants, mission statement, and core requirements. |
 | [`ROADMAP.md`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/ROADMAP.md) | Development roadmap, milestones, and release statuses. |
 | [`INDEX.md`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/INDEX.md) | Root repository navigation and inventory. |
-| [`run_enemyforge.py`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/run_enemyforge.py) | Application launcher supporting interactive web UI, headless CLI, and instant 1-click rollback. |
+| [`run_enemyforge.py`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/run_enemyforge.py) | Application launcher launching the native Qt desktop GUI (default), interactive web interface (`--web`), headless CLI (`--cli`), and Priscilla prototype (`--prototype-priscilla`). |
+
 | [`run_phantomforge.py`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/run_phantomforge.py) | Backwards-compatible forwarder to `run_enemyforge.py`. |
 | [`rebuild_regtool.bat`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/rebuild_regtool.bat) | Batch script to build the C# RegTool (.NET 9) with environment configuration. |
 | [`config.json`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/config.json) | Default generator and UI configuration. |
@@ -25,3 +26,4 @@ Adheres strictly to the guidelines of The Order (`[CS-MODULAR]`, `[CS-DECOUPLE]`
 | [`tests/`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/tests/INDEX.md) | Automated unit and integration test suite (`[CS-NO-MOCK]`). |
 | [`ELDEN_RING_ORIGINAL_MONSTER_CREATION_RESEARCH_2026-10-12.md`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/ELDEN_RING_ORIGINAL_MONSTER_CREATION_RESEARCH_2026-10-12.md) | Canonical research on original monster creation, Havok rigging, TAE timelines, and AI. |
 | [`FROM_SOFTWARE_ENEMY_PORTING_RESEARCH_2026-10-12.md`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/FROM_SOFTWARE_ENEMY_PORTING_RESEARCH_2026-10-12.md) | Canonical research on porting enemies and bosses from Dark Souls 1, 2, and 3 into Elden Ring. |
+| [`PRISCILLA_PROTOTYPE_PIPELINE.md`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/PRISCILLA_PROTOTYPE_PIPELINE.md) | Proven automation pipeline: extracting Crossbreed Priscilla from DS1 PTDE and injecting her at the tutorial cave exit. |

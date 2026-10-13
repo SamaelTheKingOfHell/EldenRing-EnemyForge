@@ -20,3 +20,7 @@ Adheres to `[CS-MODULAR]`, `[CS-DECOUPLE]`, `[CS-GRANULARITY]`, and `[CS-DEBUG]`
 | [`regulation_manager.py`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/src/regulation_manager.py) | Coordinates backup creation, executes `RegTool.dll` CLI, verifies outputs, handles fallback, and coordinates 1-click rollback. |
 | [`npc_generator.py`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/src/npc_generator.py) | Autonomous NPC synthesizer: inspects patched/modded gear from `regulation.bin` and creates thematic world enemies dropping their gear. |
 | [`server.py`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/src/server.py) | Pure standard library HTTP server and REST API for the modern Souls desktop dashboard. |
+| [`qt_app.py`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/src/qt_app.py) | Native PyQt6 / PySide6 desktop GUI application mirroring LootForge styling and architecture. |
+| [`ui/`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/src/ui/INDEX.md) | Modular Qt GUI components (Dark Souls theme, parameter schema, widget factory, preset inspector, Priscilla card). |
+| [`cross_game/`](file:///d:/The%20Order%27s%20Operations/Projects/modding/FromSoftware/Elden%20Ring/EnemyForge/src/cross_game/INDEX.md) | Cross-game asset extraction and conversion subsystem (DS1 PTDE BHD5 extractor, Priscilla prototype). |
+
