@@ -1,12 +1,6 @@
 """
-PyQt6 / PySide6 Desktop GUI for EnemyForge.
-
-Features:
-- Dark Souls fantasy theme with gold accents and responsive tabbed layout
-- Tab 1: Hostile Presets, Roaming Spawns, Carried Loot Inspector, and Regulation Patching
-- Tab 2: Cross-Game Monster Forge: DS1 PTDE Configuration & Crossbreed Priscilla Pipeline
-- Tab 3: Embedded Developer Console & Real-Time Diagnostics [CS-DEBUG]
-- Prominent Mod Manager warning banner and 1-click rollback restoration [CS-SAFETY]
+EnemyForge PyQt6 / PySide6 Desktop GUI.
+Tabs: Hostile Presets & Roaming Spawns, Cross-Game Monster Forge, Developer Console.
 """
 
 import sys
@@ -53,15 +47,12 @@ class EnemyForgeMainWindow(QMainWindow):
         self.placer = WorldPlacer(self.encounters_path)
         self.reg_manager = RegulationManager(base_dir)
 
-        self.presets = []
-        self.encounters = []
+        self.presets, self.encounters = [], []
         self.worker: Optional[ForgeWorker] = None
         self.banner_collapsed = False
 
         self.setWindowTitle("EnemyForge: Elden Ring Enemy & Carried Loot Injector (Qt Edition)")
-        self.resize(1200, 880)
-        self.setMinimumSize(900, 600)
-        self.setStyleSheet(DARK_SOULS_QSS)
+        self.resize(1200, 880); self.setMinimumSize(900, 600); self.setStyleSheet(DARK_SOULS_QSS)
 
         self._build_ui()
         self._load_data()
@@ -91,12 +82,13 @@ class EnemyForgeMainWindow(QMainWindow):
         title.setStyleSheet("font-size: 17px; font-weight: bold; color: #ffd475; letter-spacing: 1.5px;")
         header.addWidget(title)
 
+        b_style = "border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;"
         self.preset_badge = QLabel("0 Presets")
-        self.preset_badge.setStyleSheet("background-color: #161924; color: #c5a059; border: 1px solid rgba(197, 160, 89, 0.35); border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
+        self.preset_badge.setStyleSheet(f"background-color: #161924; color: #c5a059; border: 1px solid rgba(197, 160, 89, 0.35); {b_style}")
         header.addWidget(self.preset_badge)
 
         self.ds1_badge = QLabel("DS1: Checking...")
-        self.ds1_badge.setStyleSheet("background-color: #161924; color: #ffd475; border: 1px solid rgba(197, 160, 89, 0.35); border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
+        self.ds1_badge.setStyleSheet(f"background-color: #161924; color: #ffd475; border: 1px solid rgba(197, 160, 89, 0.35); {b_style}")
         header.addWidget(self.ds1_badge)
         header.addStretch()
 
@@ -177,14 +169,10 @@ class EnemyForgeMainWindow(QMainWindow):
         self.embedded_console.setReadOnly(True)
         self.embedded_console.setStyleSheet("background-color: #07080a; color: #8ee3a4; font-family: monospace; font-size: 11px;")
         tab3_layout.addWidget(self.embedded_console)
-        tab3_btns = QHBoxLayout()
         tab3_clear = QPushButton("Clear Console")
         tab3_clear.clicked.connect(self.embedded_console.clear)
-        tab3_btns.addWidget(tab3_clear)
-        tab3_btns.addStretch()
-        tab3_layout.addLayout(tab3_btns)
+        tab3_layout.addWidget(tab3_clear, alignment=Qt.AlignmentFlag.AlignLeft)
         self.tabs.addTab(tab3, "📜 Developer Console & Logs")
-
         self.console_drawer = ConsoleDrawer(self)
 
     def _load_data(self):
@@ -201,13 +189,10 @@ class EnemyForgeMainWindow(QMainWindow):
         if not hasattr(self, "ds1_badge") or not hasattr(self, "ds1_card"):
             return
         extractor = DS1Extractor(data_dir=Path(self.ds1_card.current_path) if self.ds1_card.current_path else None)
-        if extractor.is_installed():
-            self.ds1_badge.setText("✓ DS1 PTDE Connected")
-            self.ds1_badge.setStyleSheet("background-color: #062b16; color: #8ee3a4; border: 1px solid #10b981; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
-        else:
-            self.ds1_badge.setText("⚠️ DS1 PTDE Not Found")
-            self.ds1_badge.setStyleSheet("background-color: #2b1010; color: #fca5a5; border: 1px solid #ef4444; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
-
+        ok = extractor.is_installed()
+        self.ds1_badge.setText("✓ DS1 PTDE Connected" if ok else "⚠️ DS1 PTDE Not Found")
+        bg, fg, bd = ("#062b16", "#8ee3a4", "#10b981") if ok else ("#2b1010", "#fca5a5", "#ef4444")
+        self.ds1_badge.setStyleSheet(f"background-color: {bg}; color: {fg}; border: 1px solid {bd}; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
 
     def _on_ds1_path_changed(self, new_path: str):
         self.config.ds1_ptde_dir = new_path
@@ -224,10 +209,7 @@ class EnemyForgeMainWindow(QMainWindow):
         self.banner_toggle_btn.setText("▼ Expand Notice" if self.banner_collapsed else "▲ Collapse Notice")
 
     def _toggle_dev_console(self):
-        if self.console_drawer.isVisible():
-            self.console_drawer.hide()
-        else:
-            self.console_drawer.show()
+        self.console_drawer.hide() if self.console_drawer.isVisible() else self.console_drawer.show()
 
     def _set_mod_engine_reg(self):
         p = str(self.base_dir / "mod" / "regulation.bin")
@@ -267,12 +249,8 @@ class EnemyForgeMainWindow(QMainWindow):
 
     def _on_priscilla_finished(self, manifest: dict):
         self._load_data()
-        QMessageBox.information(
-            self, "Priscilla Pipeline Success",
-            f"Crossbreed Priscilla pipeline completed!\n"
-            f"Location: {manifest.get('encounter', {}).get('name')}\n"
-            f"Drops: Lifehunt Scythe, White Fur Robe, Remembrance."
-        )
+        loc = manifest.get('encounter', {}).get('name')
+        QMessageBox.information(self, "Priscilla Pipeline Success", f"Crossbreed Priscilla pipeline completed!\nLocation: {loc}\nDrops: Lifehunt Scythe, White Fur Robe, Remembrance.")
 
     def _forge_enemies(self):
         if not self.presets:
@@ -285,14 +263,16 @@ class EnemyForgeMainWindow(QMainWindow):
         self.worker.failed.connect(self._on_forge_failed)
         self.worker.start()
 
-    def _on_forge_success(self, msg: str):
+    def _reset_forge_btn(self):
         self.presets_tab.forge_btn.setEnabled(True)
         self.presets_tab.forge_btn.setText("Forge Enemies & Inject Regulation")
+
+    def _on_forge_success(self, msg: str):
+        self._reset_forge_btn()
         QMessageBox.information(self, "Forge Complete", msg)
 
     def _on_forge_failed(self, err: str):
-        self.presets_tab.forge_btn.setEnabled(True)
-        self.presets_tab.forge_btn.setText("Forge Enemies & Inject Regulation")
+        self._reset_forge_btn()
         QMessageBox.critical(self, "Forge Error", err)
 
     def _poll_logs(self):

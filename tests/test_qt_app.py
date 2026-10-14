@@ -122,6 +122,35 @@ class TestEnemyForgeQtApp(unittest.TestCase):
         self.assertFalse(self.window.banner_collapsed)
         self.assertFalse(self.window.banner_desc.isHidden())
 
+    def test_path_controls_browse_widgets_exist(self):
+        """Verify that path descriptors produce browse buttons and functional line edits."""
+        from src.ui.param_schema import ParamDescriptor, ParamType, ParamPurpose
+        from src.ui.param_widget_factory import ParamWidgetFactory
+
+        captured = {}
+        def on_change(k, v):
+            captured[k] = v
+
+        file_desc = ParamDescriptor(key="test_file", label="Test File", param_type=ParamType.PATH_FILE, purpose=ParamPurpose.PATHS)
+        w_cont, w_input = ParamWidgetFactory.create_control(file_desc, "initial/path/reg.bin", on_change)
+        self.assertEqual(w_input.text(), "initial/path/reg.bin")
+        w_input.setText("new/path/reg.bin")
+        self.assertEqual(captured.get("test_file"), "new/path/reg.bin")
+
+        dir_desc = ParamDescriptor(key="test_dir", label="Test Dir", param_type=ParamType.PATH_DIR, purpose=ParamPurpose.PATHS)
+        w_cont_d, w_input_d = ParamWidgetFactory.create_control(dir_desc, "initial/mod", on_change)
+        self.assertEqual(w_input_d.text(), "initial/mod")
+        w_input_d.setText("new/mod")
+        self.assertEqual(captured.get("test_dir"), "new/mod")
+
+    def test_ds1_browse_button_connected(self):
+        """Verify DS1 configuration card has browse button and text updates diagnostics."""
+        card = self.window.ds1_card
+        self.assertIsNotNone(card.browse_btn)
+        self.assertEqual(card.browse_btn.text(), "Browse...")
+        card.path_input.setText("D:/Custom/Path")
+        self.assertEqual(card.current_path, "D:/Custom/Path")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,9 +5,21 @@ Adheres to [CS-MODULAR] and [CS-GRANULARITY].
 """
 
 import sys
+import os
 import argparse
 import webbrowser
+import threading
+import time
 from pathlib import Path
+
+# Add project root to sys.path and set CWD for double-click safety on Windows
+BASE_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(BASE_DIR))
+try:
+    os.chdir(BASE_DIR)
+except Exception:
+    pass
+
 from src.server import start_server
 from src.logger import system_logger
 from src.preset_loader import PresetLoader

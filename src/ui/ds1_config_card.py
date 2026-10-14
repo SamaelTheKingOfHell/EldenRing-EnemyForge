@@ -115,7 +115,16 @@ class DS1ConfigCard(QFrame):
             self._refresh_diagnostics("")
 
     def _browse_folder(self):
-        chosen = QFileDialog.getExistingDirectory(self, "Select Dark Souls Prepare to Die Edition DATA Folder", self.path_input.text())
+        curr = self.path_input.text().strip()
+        start_dir = ""
+        if curr:
+            p = Path(curr)
+            if p.is_dir():
+                start_dir = str(p)
+            elif p.parent.is_dir():
+                start_dir = str(p.parent)
+        win = self.window() if hasattr(self, "window") else None
+        chosen = QFileDialog.getExistingDirectory(win, "Select Dark Souls Prepare to Die Edition DATA Folder", start_dir)
         if chosen:
             self.path_input.setText(chosen)
 

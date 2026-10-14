@@ -90,6 +90,52 @@ class ParamWidgetFactory:
             spin.valueChanged.connect(lambda val: on_change(desc.key, val))
             return spin, spin
 
+        elif desc.param_type in (ParamType.PATH_FILE, ParamType.PATH_DIR):
+            row_widget = QWidget(parent)
+            row_layout = QHBoxLayout(row_widget)
+            row_layout.setContentsMargins(0, 0, 0, 0)
+            row_layout.setSpacing(6)
+
+            line_edit = QLineEdit(row_widget)
+            line_edit.setText(str(initial_value or ""))
+            line_edit.setToolTip(desc.description)
+            line_edit.textChanged.connect(lambda text: on_change(desc.key, text.strip()))
+            row_layout.addWidget(line_edit, stretch=1)
+
+            btn_text = "📄 Browse File..." if desc.param_type == ParamType.PATH_FILE else "📁 Browse Folder..."
+            browse_btn = QPushButton(btn_text, row_widget)
+
+            def _browse():
+                curr = line_edit.text().strip()
+                start_dir = ""
+                if curr:
+                    p = Path(curr)
+                    if desc.param_type == ParamType.PATH_FILE:
+                        if p.is_file():
+                            start_dir = str(p.parent)
+                        elif p.parent.exists():
+                            start_dir = str(p.parent)
+                        elif p.exists():
+                            start_dir = str(p)
+                    else:
+                        if p.is_dir():
+                            start_dir = str(p)
+                        elif p.parent.is_dir():
+                            start_dir = str(p.parent)
+
+                win = parent.window() if parent else None
+                if desc.param_type == ParamType.PATH_FILE:
+                    f_filter = desc.file_filter or "All Files (*)"
+                    path, _ = QFileDialog.getOpenFileName(win, f"Select {desc.label}", start_dir, f_filter)
+                else:
+                    path = QFileDialog.getExistingDirectory(win, f"Select {desc.label}", start_dir)
+                if path:
+                    line_edit.setText(path)
+
+            browse_btn.clicked.connect(_browse)
+            row_layout.addWidget(browse_btn)
+            return row_widget, line_edit
+
         else:
             line = QLineEdit(parent)
             line.setText(str(initial_value) if initial_value is not None else "")
@@ -131,25 +177,6 @@ class ParamWidgetFactory:
             w_cont, w_input = cls.create_control(desc, val, on_change, card)
             row.addWidget(w_cont, stretch=1)
             ctrls[desc.key] = w_input
-
-            browse_btn = QPushButton("Browse...")
-            browse_btn.setFixedWidth(85)
-            if desc.param_type == ParamType.PATH_FILE:
-                def _browse_file(target_w=w_input, k=desc.key, flt=desc.file_filter):
-                    fn, _ = QFileDialog.getOpenFileName(card, f"Select {k}", target_w.text(), flt or "")
-                    if fn:
-                        target_w.setText(fn)
-                        on_change(k, fn)
-                browse_btn.clicked.connect(_browse_file)
-            else:
-                def _browse_dir(target_w=w_input, k=desc.key):
-                    d = QFileDialog.getExistingDirectory(card, f"Select {k}", target_w.text())
-                    if d:
-                        target_w.setText(d)
-                        on_change(k, d)
-                browse_btn.clicked.connect(_browse_dir)
-
-            row.addWidget(browse_btn)
             layout.addLayout(row)
 
         # Quick action button strip
