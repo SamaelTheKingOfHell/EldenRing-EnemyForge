@@ -38,8 +38,15 @@ class RegulationManager:
             for cand in candidates:
                 if cand.exists():
                     env["DOTNET_ROOT"] = str(cand)
-                    env["PATH"] = f"{str(cand)};{env.get('PATH', '')}"
                     break
+
+        paths_to_add = [
+            str(self.base_dir),
+            str(self.regtool_dll.parent),
+            r"D:\SteamLibrary\steamapps\common\ELDEN RING\Game"
+        ]
+        curr_path = env.get("PATH", "")
+        env["PATH"] = f"{';'.join(paths_to_add)};{curr_path}"
         return env
 
     def resolve_source_regulation(self, specified_path: Optional[Path] = None) -> Optional[Path]:

@@ -82,9 +82,9 @@ class PrototypeOrchestrator:
         )
         spec = self.builder.build_patch_spec([(preset, encounter)], config)
 
-        # 6. Apply to Regulation
-        source_reg = self.reg_manager.resolve_source_regulation()
-        target_reg = target_regulation or (self.workspace_root / "mod" / "regulation.bin")
+        # 6. Apply to Regulation & MSB Map
+        target_reg = Path(target_regulation).resolve() if target_regulation else (self.workspace_root / "mod" / "regulation.bin").resolve()
+        source_reg = target_reg if target_reg.exists() else self.reg_manager.resolve_source_regulation()
         success = self.reg_manager.execute_patch(
             patch_spec=spec,
             source_reg=source_reg,
@@ -93,6 +93,9 @@ class PrototypeOrchestrator:
         )
         if not success:
             raise RuntimeError("Regulation injection failed via RegTool.")
+
+        # 7. Deploy Assets into Active Mod Profile (chr/ and parts/ directories)
+        deployed_assets = self._deploy_assets(target_reg.parent, extracted_files)
 
         result_manifest = {
             "status": "success",
@@ -109,9 +112,12 @@ class PrototypeOrchestrator:
                 "landmark": encounter.landmark
             },
             "npc_param_id": spec["enemies"][0]["npc_param_id"],
+            "base_enemy_id": encounter.base_enemy_id,
             "carried_drops": build_priscilla_loot_spec(),
             "target_regulation": str(target_reg),
-            "message": f"Successfully injected Crossbreed Priscilla into {target_reg} at {encounter.name}!"
+            "deployed_assets_count": len(deployed_assets),
+            "deployed_assets": deployed_assets,
+            "message": f"Successfully injected Crossbreed Priscilla into {target_reg} and map {encounter.map_id} at {encounter.name}!"
         }
 
         system_logger.info(
@@ -119,6 +125,32 @@ class PrototypeOrchestrator:
             source="PrototypeOrchestrator"
         )
         return result_manifest
+
+    def _deploy_assets(self, mod_dir: Path, extracted_files: Dict[str, Path]) -> Dict[str, str]:
+        """Deploys extracted character and equipment assets into active mod profile."""
+        import shutil
+        deployed: Dict[str, str] = {}
+        chr_dir = mod_dir / "chr"
+        parts_dir = mod_dir / "parts"
+        chr_dir.mkdir(parents=True, exist_ok=True)
+        parts_dir.mkdir(parents=True, exist_ok=True)
+
+        for key, src_file in extracted_files.items():
+            src = Path(src_file)
+            if not src.exists():
+                continue
+            if "parts" in src.name.lower() or "wp_" in src.name.lower():
+                dst = parts_dir / src.name
+            else:
+                dst = chr_dir / src.name
+            try:
+                shutil.copy2(src, dst)
+                deployed[src.name] = str(dst)
+                system_logger.info(f"Deployed asset {src.name} -> {dst}", source="PrototypeOrchestrator")
+            except Exception as e:
+                system_logger.warning(f"Could not deploy asset {src.name}: {e}", source="PrototypeOrchestrator")
+
+        return deployed
 
     def _ensure_encounter_registered(self, encounter) -> None:
         """Persists the cave exit encounter in world_encounters.json if not present."""

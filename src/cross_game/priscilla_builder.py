@@ -59,9 +59,9 @@ def create_priscilla_encounter() -> WorldEncounter:
         name="Stranded Graveyard Threshold - The First Step",
         region="Limgrave",
         landmark="Outside the tutorial cave exit doors overlooking Limgrave",
-        coordinates={"x": -185.0, "y": 88.5, "z": 342.0},
+        coordinates={"x": 135.0, "y": 14.0, "z": 130.0},
         map_id="m60_42_35_00",
-        base_enemy_id=100020,
+        base_enemy_id=42000010,
         danger_tier=1,
         description="Crossbreed Priscilla standing in the windswept grass right outside the wooden exit doors of the Stranded Graveyard."
     )

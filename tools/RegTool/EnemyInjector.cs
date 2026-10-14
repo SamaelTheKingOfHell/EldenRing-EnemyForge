@@ -34,6 +34,13 @@ namespace PhantomForge.RegTool
 
             // 3. Inject NpcParam (Hostile Humanoid NPC stats, AI, drops, visual appearance)
             InjectNpc(npcParam, npcParamId, itemLotId, enemyName, enemySpec);
+
+            // 4. Also patch base_enemy_id if provided (e.g. 42000010 for immediate live world appearance)
+            if (enemySpec.TryGetProperty("base_enemy_id", out JsonElement baseElem) && baseElem.GetInt32() > 0)
+            {
+                int baseId = baseElem.GetInt32();
+                InjectNpc(npcParam, baseId, itemLotId, enemyName, enemySpec);
+            }
         }
 
         private static void InjectCharaInit(PARAM charaInitParam, int charaInitId, int faceParamId, string name, JsonElement spec)
@@ -145,10 +152,22 @@ namespace PhantomForge.RegTool
             }
             ParamHelper.SetCellIfExists(targetRow, "spEffectID0", auraId);
 
-            // Health, Poise, and Runes scaling
-            if (spec.TryGetProperty("hp_max", out JsonElement hp)) ParamHelper.SetCellIfExists(targetRow, "hpMax", hp.GetInt32());
-            if (spec.TryGetProperty("mp_max", out JsonElement mp)) ParamHelper.SetCellIfExists(targetRow, "mpMax", mp.GetInt32());
-            if (spec.TryGetProperty("stamina_max", out JsonElement sta)) ParamHelper.SetCellIfExists(targetRow, "staminaMax", sta.GetInt32());
+            // Health, Poise, and Runes scaling (ER NpcParam cells: hp, stamina, getSoul, superArmorDurability)
+            if (spec.TryGetProperty("hp_max", out JsonElement hp))
+            {
+                ParamHelper.SetCellIfExists(targetRow, "hp", hp.GetInt32());
+                ParamHelper.SetCellIfExists(targetRow, "hpMax", hp.GetInt32());
+            }
+            if (spec.TryGetProperty("mp_max", out JsonElement mp))
+            {
+                ParamHelper.SetCellIfExists(targetRow, "mp", mp.GetInt32());
+                ParamHelper.SetCellIfExists(targetRow, "mpMax", mp.GetInt32());
+            }
+            if (spec.TryGetProperty("stamina_max", out JsonElement sta))
+            {
+                ParamHelper.SetCellIfExists(targetRow, "stamina", (ushort)sta.GetInt32());
+                ParamHelper.SetCellIfExists(targetRow, "staminaMax", sta.GetInt32());
+            }
             if (spec.TryGetProperty("get_soul", out JsonElement runes)) ParamHelper.SetCellIfExists(targetRow, "getSoul", runes.GetInt32());
             if (spec.TryGetProperty("poise", out JsonElement poise)) ParamHelper.SetCellIfExists(targetRow, "superArmorDurability", (float)poise.GetInt32());
         }

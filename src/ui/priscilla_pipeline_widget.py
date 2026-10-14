@@ -35,10 +35,18 @@ class PriscillaPipelineWorker(QThread):
     completed = Signal(dict)
     failed = Signal(str)
 
-    def __init__(self, base_dir: Path, ds1_dir: Optional[str] = None, custom_encounter: Optional[WorldEncounter] = None, extract_only: bool = False):
+    def __init__(
+        self,
+        base_dir: Path,
+        ds1_dir: Optional[str] = None,
+        target_regulation: Optional[str] = None,
+        custom_encounter: Optional[WorldEncounter] = None,
+        extract_only: bool = False
+    ):
         super().__init__()
         self.base_dir = base_dir
         self.ds1_dir = ds1_dir
+        self.target_regulation = target_regulation
         self.custom_encounter = custom_encounter
         self.extract_only = extract_only
 
@@ -51,7 +59,9 @@ class PriscillaPipelineWorker(QThread):
             )
 
             self.step_updated.emit("Step 2/5: Extracting FLVER model, Havok anims, Scythe from BHD5/BDT...")
+            target_reg_path = Path(self.target_regulation).resolve() if self.target_regulation else None
             manifest = orchestrator.run_priscilla_prototype(
+                target_regulation=target_reg_path,
                 custom_encounter=self.custom_encounter,
                 extract_only=self.extract_only
             )
@@ -70,10 +80,17 @@ class PriscillaPipelineWidget(QFrame):
     """Comprehensive visual pipeline widget for porting Crossbreed Priscilla from DS1 into Elden Ring."""
     pipeline_finished = Signal(dict)
 
-    def __init__(self, base_dir: Path, ds1_path_getter: Callable[[], str], parent: Optional[QWidget] = None):
+    def __init__(
+        self,
+        base_dir: Path,
+        ds1_path_getter: Callable[[], str],
+        target_reg_getter: Optional[Callable[[], str]] = None,
+        parent: Optional[QWidget] = None
+    ):
         super().__init__(parent)
         self.base_dir = base_dir
         self.ds1_path_getter = ds1_path_getter
+        self.target_reg_getter = target_reg_getter or (lambda: "")
         self.worker: Optional[PriscillaPipelineWorker] = None
         self.available_encounters: List[WorldEncounter] = []
         self.setProperty("class", "card-highlight")
@@ -207,6 +224,7 @@ class PriscillaPipelineWidget(QFrame):
 
     def _execute_worker(self, extract_only: bool):
         ds1_path = self.ds1_path_getter()
+        target_reg = self.target_reg_getter()
         self.run_full_btn.setEnabled(False)
         self.extract_only_btn.setEnabled(False)
         self.progress_bar.show()
@@ -215,6 +233,7 @@ class PriscillaPipelineWidget(QFrame):
         self.worker = PriscillaPipelineWorker(
             base_dir=self.base_dir,
             ds1_dir=ds1_path,
+            target_regulation=target_reg,
             custom_encounter=selected_enc,
             extract_only=extract_only
         )

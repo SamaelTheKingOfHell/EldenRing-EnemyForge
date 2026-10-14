@@ -59,9 +59,10 @@ def test_priscilla_cave_exit_encounter():
     assert encounter.encounter_id == "limgrave_stranded_graveyard_cave_exit"
     assert encounter.map_id == "m60_42_35_00"
     assert encounter.region == "Limgrave"
-    assert encounter.coordinates["x"] == -185.0
-    assert encounter.coordinates["y"] == 88.5
-    assert encounter.coordinates["z"] == 342.0
+    assert encounter.coordinates["x"] == 135.0
+    assert encounter.coordinates["y"] == 14.0
+    assert encounter.coordinates["z"] == 130.0
+    assert encounter.base_enemy_id == 42000010
 
 
 def test_priscilla_loot_spec():

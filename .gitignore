@@ -34,4 +34,6 @@ data/*.bin
 data/*.dcx
 data/extracted_assets/
 !data/INDEX.md
+oo2core*.dll
+**/oo2core*.dll
 

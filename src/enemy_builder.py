@@ -65,6 +65,8 @@ class EnemyBuilder:
                 "name": preset.name,
                 "title": preset.title,
                 "npc_param_id": npc_id,
+                "base_enemy_id": encounter.base_enemy_id,
+                "model_name": "c0000",
                 "chr_asm_id": chr_asm_id,
                 "face_param_id": face_id,
                 "item_lot_id": item_lot_id,

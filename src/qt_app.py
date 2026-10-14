@@ -62,12 +62,10 @@ class EnemyForgeMainWindow(QMainWindow):
         self.log_timer.start(1200)
 
     @property
-    def inspector(self):
-        return self.presets_tab.inspector
+    def inspector(self): return self.presets_tab.inspector
 
     @property
-    def path_ctrls(self):
-        return self.presets_tab.path_ctrls
+    def path_ctrls(self): return self.presets_tab.path_ctrls
 
     def _build_ui(self):
         main_widget = QWidget()
@@ -86,11 +84,9 @@ class EnemyForgeMainWindow(QMainWindow):
         self.preset_badge = QLabel("0 Presets")
         self.preset_badge.setStyleSheet(f"background-color: #161924; color: #c5a059; border: 1px solid rgba(197, 160, 89, 0.35); {b_style}")
         header.addWidget(self.preset_badge)
-
         self.ds1_badge = QLabel("DS1: Checking...")
         self.ds1_badge.setStyleSheet(f"background-color: #161924; color: #ffd475; border: 1px solid rgba(197, 160, 89, 0.35); {b_style}")
-        header.addWidget(self.ds1_badge)
-        header.addStretch()
+        header.addWidget(self.ds1_badge); header.addStretch()
 
         self.banner_toggle_btn = QPushButton("▲ Collapse Notice")
         self.banner_toggle_btn.clicked.connect(self._toggle_banner)
@@ -153,6 +149,7 @@ class EnemyForgeMainWindow(QMainWindow):
         self.pipeline_widget = PriscillaPipelineWidget(
             base_dir=self.base_dir,
             ds1_path_getter=lambda: self.ds1_card.current_path,
+            target_reg_getter=self._get_target_reg,
             parent=tab2
         )
         self.pipeline_widget.pipeline_finished.connect(self._on_priscilla_finished)
@@ -267,13 +264,15 @@ class EnemyForgeMainWindow(QMainWindow):
         self.presets_tab.forge_btn.setEnabled(True)
         self.presets_tab.forge_btn.setText("Forge Enemies & Inject Regulation")
 
+    def _get_target_reg(self) -> str:
+        ctrl = getattr(self, "path_ctrls", {}).get("target_regulation")
+        return ctrl.text().strip() if ctrl else str(self.config.target_regulation or "")
+
     def _on_forge_success(self, msg: str):
-        self._reset_forge_btn()
-        QMessageBox.information(self, "Forge Complete", msg)
+        self._reset_forge_btn(); QMessageBox.information(self, "Forge Complete", msg)
 
     def _on_forge_failed(self, err: str):
-        self._reset_forge_btn()
-        QMessageBox.critical(self, "Forge Error", err)
+        self._reset_forge_btn(); QMessageBox.critical(self, "Forge Error", err)
 
     def _poll_logs(self):
         self.console_drawer.poll_logs()

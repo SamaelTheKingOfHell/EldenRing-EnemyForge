@@ -40,6 +40,11 @@ namespace PhantomForge.RegTool
                         GearInspectorService.InspectGear(options);
                         return 0;
 
+                    case "inspect-map":
+                        ValidateRequiredOptions(options, "--input");
+                        DiagnosticService.InspectMap(options["--input"]);
+                        return 0;
+
                     default:
                         Console.Error.WriteLine($"[RegTool ERROR] Unknown command: '{command}'");
                         PrintHelp();

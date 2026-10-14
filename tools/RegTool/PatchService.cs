@@ -110,6 +110,29 @@ namespace PhantomForge.RegTool
 
                     LootInjector.InjectCarriedLootDrops(itemLotParam, itemLotId, name, carriedDrops);
                 }
+
+                // 2b. Map MSB Injection (Places enemies into live world mapstudio archives)
+                string modDir = Path.GetDirectoryName(Path.GetFullPath(outputPath))!;
+                string? gameMapDir = FindGameMapStudioDir(modDir);
+
+                foreach (JsonElement enemySpec in enemiesArray.EnumerateArray())
+                {
+                    if (enemySpec.TryGetProperty("world_placement", out var wp) && wp.TryGetProperty("map_id", out var mid))
+                    {
+                        string mapId = mid.GetString() ?? "";
+                        if (!string.IsNullOrEmpty(mapId))
+                        {
+                            string msbFileName = $"{mapId}.msb.dcx";
+                            string targetMsb = Path.Combine(modDir, "map", "mapstudio", msbFileName);
+                            string? sourceMsb = File.Exists(targetMsb) ? targetMsb : (gameMapDir != null ? Path.Combine(gameMapDir, msbFileName) : null);
+
+                            if (sourceMsb != null && File.Exists(sourceMsb))
+                            {
+                                MapInjectorService.InjectMapEnemies(sourceMsb, targetMsb, enemySpec);
+                            }
+                        }
+                    }
+                }
             }
 
             // 3. FMG Name Injection (if message directory is present)
@@ -165,6 +188,24 @@ namespace PhantomForge.RegTool
             Console.WriteLine($"[RegTool] Encrypting and saving regulation to: {outputPath}...");
             RegulationDecryptor.EncryptERRegulation(outputPath, regBnd);
             Console.WriteLine("[RegTool] Patch complete! Regulation successfully forged.");
+        }
+
+        private static string? FindGameMapStudioDir(string modDir)
+        {
+            string[] candidates =
+            {
+                Path.Combine(modDir, "..", "..", "..", "..", "..", "ELDEN RING", "Game", "map", "mapstudio"),
+                @"D:\SteamLibrary\steamapps\common\ELDEN RING\Game\map\mapstudio",
+                @"C:\SteamLibrary\steamapps\common\ELDEN RING\Game\map\mapstudio",
+                @"C:\Program Files (x86)\Steam\steamapps\common\ELDEN RING\Game\map\mapstudio",
+                @"E:\SteamLibrary\steamapps\common\ELDEN RING\Game\map\mapstudio"
+            };
+
+            foreach (var cand in candidates)
+            {
+                if (Directory.Exists(cand)) return Path.GetFullPath(cand);
+            }
+            return null;
         }
     }
 }
