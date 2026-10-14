@@ -2,13 +2,11 @@
 PyQt6 / PySide6 Desktop GUI for EnemyForge.
 
 Features:
-- Dark Souls fantasy theme with gold accents and responsive layout
-- Prominent Mod Manager warning banner
-- Schema-driven parameter configuration cards [CS-DECOUPLE]
-- Interactive Preset & Carried Loot Inspector
-- Asynchronous Cross-Game Priscilla prototype extractor and injector
-- Real-time streaming Developer Console drawer [CS-DEBUG]
-- One-click rollback and pristine vanilla restoration [CS-SAFETY]
+- Dark Souls fantasy theme with gold accents and responsive tabbed layout
+- Tab 1: Hostile Presets, Roaming Spawns, Carried Loot Inspector, and Regulation Patching
+- Tab 2: Cross-Game Monster Forge: DS1 PTDE Configuration & Crossbreed Priscilla Pipeline
+- Tab 3: Embedded Developer Console & Real-Time Diagnostics [CS-DEBUG]
+- Prominent Mod Manager warning banner and 1-click rollback restoration [CS-SAFETY]
 """
 
 import sys
@@ -18,29 +16,27 @@ from typing import List, Dict, Any, Optional
 try:
     from PySide6.QtWidgets import (
         QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-        QLabel, QPushButton, QFrame, QScrollArea, QMessageBox,
-        QSplitter
+        QLabel, QPushButton, QFrame, QMessageBox, QTabWidget, QTextEdit
     )
     from PySide6.QtCore import Qt, QTimer
 except (ImportError, Exception):
     from PyQt6.QtWidgets import (
         QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-        QLabel, QPushButton, QFrame, QScrollArea, QMessageBox,
-        QSplitter
+        QLabel, QPushButton, QFrame, QMessageBox, QTabWidget, QTextEdit
     )
     from PyQt6.QtCore import Qt, QTimer
 
-from src.models import EnemyForgeConfig, PlacementMode
+from src.models import EnemyForgeConfig
 from src.preset_loader import PresetLoader
 from src.world_placer import WorldPlacer
 from src.regulation_manager import RegulationManager
 from src.npc_generator import NPCGenerator
+from src.cross_game.ds1_extractor import DS1Extractor
 from src.logger import system_logger
 from src.ui.theme import DARK_SOULS_QSS
-from src.ui.param_schema import get_generator_param_descriptors
-from src.ui.param_widget_factory import ParamWidgetFactory
-from src.ui.preset_inspector import PresetInspectorWidget
-from src.ui.prototype_card import PrototypeCard
+from src.ui.presets_tab import HostilePresetsTab
+from src.ui.ds1_config_card import DS1ConfigCard
+from src.ui.priscilla_pipeline_widget import PriscillaPipelineWidget
 from src.ui.console_drawer import ConsoleDrawer
 from src.ui.forge_worker import ForgeWorker
 
@@ -63,16 +59,24 @@ class EnemyForgeMainWindow(QMainWindow):
         self.banner_collapsed = False
 
         self.setWindowTitle("EnemyForge: Elden Ring Enemy & Carried Loot Injector (Qt Edition)")
-        self.resize(1180, 860)
-        self.setMinimumSize(880, 560)
+        self.resize(1200, 880)
+        self.setMinimumSize(900, 600)
         self.setStyleSheet(DARK_SOULS_QSS)
 
         self._build_ui()
         self._load_data()
 
         self.log_timer = QTimer(self)
-        self.log_timer.timeout.connect(self.console_drawer.poll_logs)
+        self.log_timer.timeout.connect(self._poll_logs)
         self.log_timer.start(1200)
+
+    @property
+    def inspector(self):
+        return self.presets_tab.inspector
+
+    @property
+    def path_ctrls(self):
+        return self.presets_tab.path_ctrls
 
     def _build_ui(self):
         main_widget = QWidget()
@@ -90,6 +94,10 @@ class EnemyForgeMainWindow(QMainWindow):
         self.preset_badge = QLabel("0 Presets")
         self.preset_badge.setStyleSheet("background-color: #161924; color: #c5a059; border: 1px solid rgba(197, 160, 89, 0.35); border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
         header.addWidget(self.preset_badge)
+
+        self.ds1_badge = QLabel("DS1: Checking...")
+        self.ds1_badge.setStyleSheet("background-color: #161924; color: #ffd475; border: 1px solid rgba(197, 160, 89, 0.35); border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
+        header.addWidget(self.ds1_badge)
         header.addStretch()
 
         self.banner_toggle_btn = QPushButton("▲ Collapse Notice")
@@ -101,22 +109,7 @@ class EnemyForgeMainWindow(QMainWindow):
         header.addWidget(self.dev_console_btn)
         main_layout.addLayout(header)
 
-        # Splitter Layout
-        self.main_splitter = QSplitter(Qt.Orientation.Vertical)
-        self.main_splitter.setChildrenCollapsible(False)
-        self.main_splitter.setHandleWidth(8)
-
-        # Top Configuration Container (Scrollable)
-        top_scroll = QScrollArea()
-        top_scroll.setWidgetResizable(True)
-        top_scroll.setFrameShape(QFrame.Shape.NoFrame)
-
-        top_container = QWidget()
-        top_layout = QVBoxLayout(top_container)
-        top_layout.setContentsMargins(0, 0, 4, 0)
-        top_layout.setSpacing(10)
-
-        # Banner Frame
+        # Mod Manager Notice Banner
         self.banner_frame = QFrame()
         self.banner_frame.setProperty("class", "banner")
         banner_vbox = QVBoxLayout(self.banner_frame)
@@ -130,71 +123,67 @@ class EnemyForgeMainWindow(QMainWindow):
         )
         self.banner_desc.setWordWrap(True)
         banner_vbox.addWidget(self.banner_desc)
-        top_layout.addWidget(self.banner_frame)
+        main_layout.addWidget(self.banner_frame)
 
-        # Parameter cards
-        descriptors = get_generator_param_descriptors()
-        paths_card, self.path_ctrls = ParamWidgetFactory.build_paths_card(
-            descriptors, self.config, self._on_param_changed,
-            on_mod_engine=self._set_mod_engine_reg,
-            on_vanilla=self._set_vanilla_reg,
-            on_backup=self._create_backup,
+        # Main Tabbed Interface
+        self.tabs = QTabWidget()
+        main_layout.addWidget(self.tabs, stretch=1)
+
+        # Tab 1: Hostile Presets & Roaming Spawns
+        self.presets_tab = HostilePresetsTab(
+            base_dir=self.base_dir,
+            config=self.config,
+            on_param_changed=self._on_param_changed,
+            on_set_mod_engine=self._set_mod_engine_reg,
+            on_set_vanilla=self._set_vanilla_reg,
+            on_create_backup=self._create_backup,
             on_rollback=self._rollback,
-            parent=top_container
+            on_synthesize=self._synthesize_npcs,
+            on_refresh=self._load_data,
+            on_forge=self._forge_enemies,
+            parent=self.tabs
         )
-        top_layout.addWidget(paths_card)
+        self.tabs.addTab(self.presets_tab, "⚔️ Hostile Presets & Roaming Spawns")
 
-        # Spawn rules and synthesis row
-        rules_row = QHBoxLayout()
-        rules_card, _ = ParamWidgetFactory.build_spawn_rules_card(
-            descriptors, self.config, self._on_param_changed, parent=top_container
+        # Tab 2: Cross-Game Monster Forge (Dark Souls ➔ Elden Ring)
+        tab2 = QWidget()
+        tab2_layout = QVBoxLayout(tab2)
+        tab2_layout.setContentsMargins(4, 8, 4, 4)
+        tab2_layout.setSpacing(10)
+
+        self.ds1_card = DS1ConfigCard(
+            initial_path=self.config.ds1_ptde_dir,
+            on_path_changed=self._on_ds1_path_changed,
+            parent=tab2
         )
-        rules_row.addWidget(rules_card, stretch=1)
+        tab2_layout.addWidget(self.ds1_card)
 
-        synth_card, _ = ParamWidgetFactory.build_synthesizer_card(
-            descriptors, on_synthesize=self._synthesize_npcs, parent=top_container
+        self.pipeline_widget = PriscillaPipelineWidget(
+            base_dir=self.base_dir,
+            ds1_path_getter=lambda: self.ds1_card.current_path,
+            parent=tab2
         )
-        rules_row.addWidget(synth_card, stretch=1)
-        top_layout.addLayout(rules_row)
+        self.pipeline_widget.pipeline_finished.connect(self._on_priscilla_finished)
+        tab2_layout.addWidget(self.pipeline_widget, stretch=1)
 
-        # Prototype Card for Crossbreed Priscilla
-        self.proto_card = PrototypeCard(self.base_dir, on_completed=self._on_prototype_completed, parent=top_container)
-        top_layout.addWidget(self.proto_card)
+        self.tabs.addTab(tab2, "❄️ Cross-Game: Crossbreed Priscilla (DS1 ➔ ER)")
+        self.proto_card = self.pipeline_widget  # Backwards compatibility
 
-        top_scroll.setWidget(top_container)
-        self.main_splitter.addWidget(top_scroll)
-
-        # Middle / Bottom Inspector Section
-        bottom_container = QWidget()
-        bottom_layout = QVBoxLayout(bottom_container)
-        bottom_layout.setContentsMargins(0, 4, 0, 0)
-        bottom_layout.setSpacing(8)
-
-        self.inspector = PresetInspectorWidget(bottom_container)
-        bottom_layout.addWidget(self.inspector, stretch=1)
-
-        # Action Bar
-        action_layout = QHBoxLayout()
-        self.rollback_btn = QPushButton("Rollback to Vanilla Regulation")
-        self.rollback_btn.setProperty("class", "danger")
-        self.rollback_btn.clicked.connect(self._rollback)
-        action_layout.addWidget(self.rollback_btn)
-
-        self.refresh_btn = QPushButton("🔄 Refresh Presets")
-        self.refresh_btn.clicked.connect(self._load_data)
-        action_layout.addWidget(self.refresh_btn)
-        action_layout.addStretch()
-
-        self.forge_btn = QPushButton("Forge Enemies & Inject Regulation")
-        self.forge_btn.setProperty("class", "primary")
-        self.forge_btn.setFixedHeight(38)
-        self.forge_btn.clicked.connect(self._forge_enemies)
-        action_layout.addWidget(self.forge_btn)
-
-        bottom_layout.addLayout(action_layout)
-        self.main_splitter.addWidget(bottom_container)
-        self.main_splitter.setSizes([450, 350])
-        main_layout.addWidget(self.main_splitter)
+        # Tab 3: Embedded Developer Console
+        tab3 = QWidget()
+        tab3_layout = QVBoxLayout(tab3)
+        tab3_layout.setContentsMargins(6, 8, 6, 6)
+        self.embedded_console = QTextEdit()
+        self.embedded_console.setReadOnly(True)
+        self.embedded_console.setStyleSheet("background-color: #07080a; color: #8ee3a4; font-family: monospace; font-size: 11px;")
+        tab3_layout.addWidget(self.embedded_console)
+        tab3_btns = QHBoxLayout()
+        tab3_clear = QPushButton("Clear Console")
+        tab3_clear.clicked.connect(self.embedded_console.clear)
+        tab3_btns.addWidget(tab3_clear)
+        tab3_btns.addStretch()
+        tab3_layout.addLayout(tab3_btns)
+        self.tabs.addTab(tab3, "📜 Developer Console & Logs")
 
         self.console_drawer = ConsoleDrawer(self)
 
@@ -202,9 +191,24 @@ class EnemyForgeMainWindow(QMainWindow):
         self.presets = self.preset_loader.discover_and_load()
         self.placer = WorldPlacer(self.encounters_path)
         self.encounters = self.placer.all_encounters
-        self.inspector.set_data(self.presets, self.encounters)
+        self.presets_tab.set_data(self.presets, self.encounters)
+        self.pipeline_widget.set_encounters(self.encounters)
         self.preset_badge.setText(f"{len(self.presets)} Presets Discovered")
+        self._update_ds1_badge()
         system_logger.info(f"Loaded {len(self.presets)} presets and {len(self.encounters)} world encounters.", source="UI")
+
+    def _update_ds1_badge(self):
+        extractor = DS1Extractor(data_dir=Path(self.ds1_card.current_path) if self.ds1_card.current_path else None)
+        if extractor.is_installed():
+            self.ds1_badge.setText("✓ DS1 PTDE Connected")
+            self.ds1_badge.setStyleSheet("background-color: #062b16; color: #8ee3a4; border: 1px solid #10b981; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
+        else:
+            self.ds1_badge.setText("⚠️ DS1 PTDE Not Found")
+            self.ds1_badge.setStyleSheet("background-color: #2b1010; color: #fca5a5; border: 1px solid #ef4444; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
+
+    def _on_ds1_path_changed(self, new_path: str):
+        self.config.ds1_ptde_dir = new_path
+        self._update_ds1_badge()
 
     def _on_param_changed(self, key: str, val: Any):
         if hasattr(self.config, key):
@@ -242,8 +246,7 @@ class EnemyForgeMainWindow(QMainWindow):
 
     def _rollback(self):
         reply = QMessageBox.question(
-            self, "Confirm Rollback",
-            "Are you sure you want to restore the pristine vanilla regulation.bin?",
+            self, "Confirm Rollback", "Are you sure you want to restore the pristine vanilla regulation.bin?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         if reply == QMessageBox.StandardButton.Yes:
@@ -259,11 +262,11 @@ class EnemyForgeMainWindow(QMainWindow):
         QMessageBox.information(self, "Synthesis Complete", f"Synthesized {len(generated)} NPC enemy presets into input_presets/!")
         self._load_data()
 
-    def _on_prototype_completed(self, manifest: dict):
+    def _on_priscilla_finished(self, manifest: dict):
         self._load_data()
         QMessageBox.information(
-            self, "Priscilla Injected",
-            f"Crossbreed Priscilla successfully injected!\n"
+            self, "Priscilla Pipeline Success",
+            f"Crossbreed Priscilla pipeline completed!\n"
             f"Location: {manifest.get('encounter', {}).get('name')}\n"
             f"Drops: Lifehunt Scythe, White Fur Robe, Remembrance."
         )
@@ -272,23 +275,31 @@ class EnemyForgeMainWindow(QMainWindow):
         if not self.presets:
             QMessageBox.warning(self, "Forge Warning", "No enemy presets loaded to forge.")
             return
-
-        self.forge_btn.setEnabled(False)
-        self.forge_btn.setText("Forging Regulation...")
+        self.presets_tab.forge_btn.setEnabled(False)
+        self.presets_tab.forge_btn.setText("Forging Regulation...")
         self.worker = ForgeWorker(self.base_dir, self.config, self.presets, self.encounters_path)
         self.worker.finished_success.connect(self._on_forge_success)
         self.worker.failed.connect(self._on_forge_failed)
         self.worker.start()
 
     def _on_forge_success(self, msg: str):
-        self.forge_btn.setEnabled(True)
-        self.forge_btn.setText("Forge Enemies & Inject Regulation")
+        self.presets_tab.forge_btn.setEnabled(True)
+        self.presets_tab.forge_btn.setText("Forge Enemies & Inject Regulation")
         QMessageBox.information(self, "Forge Complete", msg)
 
     def _on_forge_failed(self, err: str):
-        self.forge_btn.setEnabled(True)
-        self.forge_btn.setText("Forge Enemies & Inject Regulation")
+        self.presets_tab.forge_btn.setEnabled(True)
+        self.presets_tab.forge_btn.setText("Forge Enemies & Inject Regulation")
         QMessageBox.critical(self, "Forge Error", err)
+
+    def _poll_logs(self):
+        self.console_drawer.poll_logs()
+        recent = system_logger.get_in_memory_logs(limit=40)
+        if recent:
+            txt = "\n".join(f"[{l['timestamp']}] [{l['level']}] [{l['source']}] {l['message']}" for l in recent)
+            if self.embedded_console.toPlainText() != txt:
+                self.embedded_console.setPlainText(txt)
+                self.embedded_console.verticalScrollBar().setValue(self.embedded_console.verticalScrollBar().maximum())
 
 
 def main():

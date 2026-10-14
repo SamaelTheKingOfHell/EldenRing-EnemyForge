@@ -20,15 +20,21 @@ from src.logger import system_logger
 class PrototypeOrchestrator:
     """Orchestrates end-to-end automation for porting Crossbreed Priscilla into Elden Ring."""
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None, ds1_data_dir: Optional[Path] = None):
         self.workspace_root = Path(workspace_root or Path(__file__).resolve().parent.parent.parent)
         self.extracted_cache_dir = self.workspace_root / "data" / "extracted_assets" / "ds1" / "c2730"
         self.encounters_file = self.workspace_root / "data" / "world_encounters.json"
-        self.extractor = DS1Extractor()
+        self.extractor = DS1Extractor(data_dir=Path(ds1_data_dir) if ds1_data_dir else None)
         self.reg_manager = RegulationManager(self.workspace_root)
         self.builder = EnemyBuilder()
 
-    def run_priscilla_prototype(self, target_regulation: Optional[Path] = None) -> Dict[str, Any]:
+    def run_priscilla_prototype(
+        self,
+        target_regulation: Optional[Path] = None,
+        custom_encounter: Optional[Any] = None,
+        extract_only: bool = False
+    ) -> Dict[str, Any]:
+
         """
         Executes the prototype automation:
         1. Verifies local DS1 installation.
@@ -49,10 +55,20 @@ class PrototypeOrchestrator:
 
         # 2. Extract Priscilla's Assets
         extracted_files = self.extractor.extract_priscilla_assets(self.extracted_cache_dir)
+        if extract_only:
+            return {
+                "status": "extracted_only",
+                "prototype": "Crossbreed Priscilla Assets (Dark Souls 1 PTDE)",
+                "source_game_path": str(self.extractor.data_dir),
+                "extracted_assets_count": len(extracted_files),
+                "extracted_assets_dir": str(self.extracted_cache_dir),
+                "files": {k: str(v) for k, v in extracted_files.items()},
+                "message": f"Successfully extracted {len(extracted_files)} files to {self.extracted_cache_dir}."
+            }
 
         # 3. Build Preset and Encounter
         preset = create_priscilla_preset()
-        encounter = create_priscilla_encounter()
+        encounter = custom_encounter or create_priscilla_encounter()
 
         # 4. Register Encounter in world_encounters.json if missing
         self._ensure_encounter_registered(encounter)
@@ -80,6 +96,7 @@ class PrototypeOrchestrator:
 
         result_manifest = {
             "status": "success",
+
             "prototype": "Crossbreed Priscilla (Dark Souls 1 PTDE -> Elden Ring)",
             "source_game_path": str(self.extractor.data_dir),
             "extracted_assets_count": len(extracted_files),

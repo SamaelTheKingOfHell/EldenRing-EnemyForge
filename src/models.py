@@ -144,8 +144,9 @@ class EnemyForgeConfig:
     enable_invasion_aura: bool = False
     scale_attributes_by_tier: bool = True
     mystery_mode: bool = False
-
+    ds1_ptde_dir: str = ""
     ui_language: str = "en"
+
 
 
 # Backward-compatible alias

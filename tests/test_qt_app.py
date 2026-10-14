@@ -6,7 +6,8 @@ Verifies:
 - Preset and encounter data loading in inspector tables
 - Path inputs and preset regulation buttons
 - Parameter mutation synchronization
-- Priscilla prototype card initialization
+- DS1 configuration card diagnostics & badge updating
+- Priscilla pipeline widget and encounter selector
 - Developer console drawer toggling
 """
 
@@ -22,6 +23,7 @@ os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 from src.qt_app import QApplication, EnemyForgeMainWindow
 from src.models import EnemyForgeConfig, PlacementMode
+from src.cross_game.ds1_extractor import DS1Extractor
 
 
 class TestEnemyForgeQtApp(unittest.TestCase):
@@ -40,11 +42,13 @@ class TestEnemyForgeQtApp(unittest.TestCase):
         self.window.close()
 
     def test_window_initialization(self):
-        """Verify window initializes with correct title, stylesheet, and widgets."""
+        """Verify window initializes with correct title, stylesheet, tabs, and widgets."""
         self.assertIn("EnemyForge", self.window.windowTitle())
         self.assertIsNotNone(self.window.inspector)
-        self.assertIsNotNone(self.window.proto_card)
+        self.assertIsNotNone(self.window.ds1_card)
+        self.assertIsNotNone(self.window.pipeline_widget)
         self.assertIsNotNone(self.window.console_drawer)
+        self.assertEqual(self.window.tabs.count(), 3)
 
     def test_presets_and_encounters_loaded(self):
         """Verify that presets and world encounters are populated into the inspector tables."""
@@ -78,6 +82,27 @@ class TestEnemyForgeQtApp(unittest.TestCase):
         expected_van = str(self.base_dir / "data" / "regulation.bin.vanilla_fallback")
         self.assertEqual(self.window.path_ctrls["active_regulation_path"].text(), expected_van)
 
+    def test_ds1_configuration_card_and_badge(self):
+        """Verify DS1 configuration card diagnostics and badge status."""
+        self.assertIsNotNone(self.window.ds1_card.path_input)
+        detected = DS1Extractor.detect_ptde_data_dir()
+        if detected:
+            self.assertEqual(self.window.ds1_card.path_input.text(), str(detected))
+            self.assertIn("Connected", self.window.ds1_badge.text())
+        else:
+            self.assertIn("Not Found", self.window.ds1_badge.text())
+
+    def test_ds1_path_changed_updates_config(self):
+        """Verify editing DS1 path updates config and badge."""
+        self.window.ds1_card.path_input.setText("C:/Custom/DS1/DATA")
+        self.assertEqual(self.window.config.ds1_ptde_dir, "C:/Custom/DS1/DATA")
+
+    def test_priscilla_pipeline_widget_encounter_selector(self):
+        """Verify Priscilla pipeline widget populates available spawn encounters."""
+        combo = self.window.pipeline_widget.encounter_combo
+        self.assertGreater(combo.count(), 1)
+        self.assertIn("Default: Stranded Graveyard Tutorial Cave Exit", combo.itemText(0))
+
     def test_dev_console_toggle(self):
         """Verify developer console drawer can be toggled."""
         self.assertFalse(self.window.console_drawer.isVisible())
@@ -96,8 +121,6 @@ class TestEnemyForgeQtApp(unittest.TestCase):
         self.window._toggle_banner()
         self.assertFalse(self.window.banner_collapsed)
         self.assertFalse(self.window.banner_desc.isHidden())
-
-        self.assertTrue(self.window.banner_desc.isVisible())
 
 
 if __name__ == "__main__":

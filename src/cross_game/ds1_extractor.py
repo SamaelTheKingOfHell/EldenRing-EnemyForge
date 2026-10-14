@@ -8,8 +8,9 @@ Enforces legal compliance: extracts directly from the user's licensed game insta
 import struct
 import zlib
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from src.logger import system_logger
+
 
 
 COMMON_STEAM_PATHS = [
@@ -60,6 +61,28 @@ class DS1Extractor:
         if not self.data_dir or not self.data_dir.exists():
             return False
         return (self.data_dir / "DARKSOULS.exe").exists() and (self.data_dir / "dvdbnd0.bhd5").exists()
+
+    def get_diagnostics(self) -> Dict[str, Any]:
+        """Returns structured diagnostic status of the target DS1 PTDE installation."""
+        data_dir_exists = bool(self.data_dir and self.data_dir.exists())
+        has_exe = bool(data_dir_exists and (self.data_dir / "DARKSOULS.exe").exists())
+        bhd0 = bool(self.dvdbnd0_bhd and self.dvdbnd0_bhd.exists())
+        bdt0 = bool(self.dvdbnd0_bdt and self.dvdbnd0_bdt.exists())
+        bdt0_size = self.dvdbnd0_bdt.stat().st_size if bdt0 else 0
+        bhd1 = bool(self.dvdbnd1_bhd and self.dvdbnd1_bhd.exists())
+        bdt1 = bool(self.dvdbnd1_bdt and self.dvdbnd1_bdt.exists())
+        bdt1_size = self.dvdbnd1_bdt.stat().st_size if bdt1 else 0
+
+        return {
+            "data_dir": str(self.data_dir) if self.data_dir else "",
+            "is_valid": self.is_installed(),
+            "has_exe": has_exe,
+            "dvdbnd0_valid": bhd0 and bdt0,
+            "dvdbnd0_size": bdt0_size,
+            "dvdbnd1_valid": bhd1 and bdt1,
+            "dvdbnd1_size": bdt1_size,
+        }
+
 
     def _read_bhd5_index(self, bhd_path: Path) -> Dict[int, Tuple[int, int]]:
         """Parses a BHD5 header file and returns a mapping: {hash: (padded_size, file_offset)}."""
