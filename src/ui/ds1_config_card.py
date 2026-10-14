@@ -38,6 +38,8 @@ class DS1ConfigCard(QFrame):
         self.current_path = initial_path
         self._build_ui()
         self._set_initial_or_autodetect()
+        self.path_input.textChanged.connect(self._on_text_changed)
+
 
     def _build_ui(self):
         layout = QVBoxLayout(self)
@@ -64,8 +66,8 @@ class DS1ConfigCard(QFrame):
 
         self.path_input = QLineEdit()
         self.path_input.setPlaceholderText("Select Dark Souls Prepare to Die Edition/DATA directory...")
-        self.path_input.textChanged.connect(self._on_text_changed)
         row.addWidget(self.path_input, stretch=1)
+
 
         self.browse_btn = QPushButton("Browse...")
         self.browse_btn.clicked.connect(self._browse_folder)

@@ -198,6 +198,8 @@ class EnemyForgeMainWindow(QMainWindow):
         system_logger.info(f"Loaded {len(self.presets)} presets and {len(self.encounters)} world encounters.", source="UI")
 
     def _update_ds1_badge(self):
+        if not hasattr(self, "ds1_badge") or not hasattr(self, "ds1_card"):
+            return
         extractor = DS1Extractor(data_dir=Path(self.ds1_card.current_path) if self.ds1_card.current_path else None)
         if extractor.is_installed():
             self.ds1_badge.setText("✓ DS1 PTDE Connected")
@@ -205,6 +207,7 @@ class EnemyForgeMainWindow(QMainWindow):
         else:
             self.ds1_badge.setText("⚠️ DS1 PTDE Not Found")
             self.ds1_badge.setStyleSheet("background-color: #2b1010; color: #fca5a5; border: 1px solid #ef4444; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold;")
+
 
     def _on_ds1_path_changed(self, new_path: str):
         self.config.ds1_ptde_dir = new_path

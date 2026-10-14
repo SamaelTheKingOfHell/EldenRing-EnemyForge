@@ -117,8 +117,12 @@ def run_qt_app(base_dir: Path) -> int:
         qt_main()
         return 0
     except Exception as e:
-        system_logger.error(f"Failed to start Qt interface: {e}; falling back to web server.", source="Launcher")
-        return run_web_server(base_dir)
+        import traceback
+        traceback.print_exc()
+        system_logger.error(f"Failed to start Qt desktop interface: {e}", source="Launcher")
+        print(f"\n[FATAL] Qt GUI launch failed: {e}")
+        return 1
+
 
 
 def run_web_server(base_dir: Path, port: int = 8484, no_browser: bool = False) -> int:
