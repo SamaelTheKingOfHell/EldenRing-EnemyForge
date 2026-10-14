@@ -176,7 +176,11 @@ class PriscillaPipelineWidget(QFrame):
         self.extract_only_btn.clicked.connect(self._run_extract_only)
         btn_row.addWidget(self.extract_only_btn)
 
-        self.inspect_files_btn = QPushButton("🔍 Toggle Extracted Assets Table")
+        self.spawn_live_btn = QPushButton("⚡ Live Spawn In Front of Player (F4)")
+        self.spawn_live_btn.clicked.connect(self._spawn_live)
+        btn_row.addWidget(self.spawn_live_btn)
+
+        self.inspect_files_btn = QPushButton("🔍 Toggle Assets")
         self.inspect_files_btn.clicked.connect(self._toggle_files_table)
         btn_row.addWidget(self.inspect_files_btn)
         layout.addLayout(btn_row)
@@ -265,3 +269,19 @@ class PriscillaPipelineWidget(QFrame):
         self.status_lbl.setText(f"✗ Pipeline Failed: {error}")
         self.status_lbl.setStyleSheet("color: #ff8585; font-size: 11px; font-weight: bold;")
         QMessageBox.critical(self, "Pipeline Error", error)
+
+    def _spawn_live(self):
+        script = self.base_dir.parent / "DebugTools" / "scripts" / "spawn_priscilla_live.py"
+        if not script.exists():
+            QMessageBox.warning(self, "Debug Tool Not Found", f"Script not found at: {script}")
+            return
+        self.status_lbl.setText("Relocating Priscilla in front of live player...")
+        self.status_lbl.setStyleSheet("color: #ffd475; font-size: 11px;")
+        res = subprocess.run([sys.executable, str(script), "3.0"], capture_output=True, text=True)
+        if res.returncode == 0:
+            self.status_lbl.setText("✓ Priscilla relocated! Press F4/F3 in-game to refresh.")
+            self.status_lbl.setStyleSheet("color: #8ee3a4; font-size: 11px; font-weight: bold;")
+            QMessageBox.information(self, "Live Spawner", "Priscilla relocated in front of player!\nPress F4 or F3 in-game (or sit at Grace) to view her immediately.")
+        else:
+            self.status_lbl.setText(f"✗ Spawn failed: {res.stderr}")
+            self.status_lbl.setStyleSheet("color: #ff8585; font-size: 11px;")

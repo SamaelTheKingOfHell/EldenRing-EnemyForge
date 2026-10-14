@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace PhantomForge.RegTool
 {
@@ -10,8 +12,13 @@ namespace PhantomForge.RegTool
     /// </summary>
     public static class Program
     {
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool SetDllDirectory(string lpPathName);
+
         public static int Main(string[] args)
         {
+            SetDllDirectory(AppContext.BaseDirectory);
+
             if (args.Length == 0 || args[0] is "-h" or "--help")
             {
                 PrintHelp();
@@ -44,6 +51,14 @@ namespace PhantomForge.RegTool
                         ValidateRequiredOptions(options, "--input");
                         DiagnosticService.InspectMap(options["--input"]);
                         return 0;
+
+                    case "relocate-enemy":
+                        ValidateRequiredOptions(options, "--map", "--name", "--x", "--y", "--z");
+                        float rx = float.Parse(options["--x"], System.Globalization.CultureInfo.InvariantCulture);
+                        float ry = float.Parse(options["--y"], System.Globalization.CultureInfo.InvariantCulture);
+                        float rz = float.Parse(options["--z"], System.Globalization.CultureInfo.InvariantCulture);
+                        bool relocated = RelocateEnemyService.Relocate(options["--map"], options["--name"], rx, ry, rz);
+                        return relocated ? 0 : 1;
 
                     default:
                         Console.Error.WriteLine($"[RegTool ERROR] Unknown command: '{command}'");
